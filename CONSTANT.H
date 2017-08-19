@@ -1,0 +1,1 @@
+//This file contains all necessary constants for the game.
