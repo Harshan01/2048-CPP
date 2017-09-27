@@ -1,4 +1,5 @@
 #include"GRID.H"
+#include"stdlib.h"
 Grid::Grid()
 {
      score=0;
