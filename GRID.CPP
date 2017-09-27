@@ -1,6 +1,7 @@
 #include"GRID.H"
 Grid::Grid()
 {
+     score=0;
      for(int i=0; i<SIZE; i++)
 	for(int j=0; j< SIZE; j++)
 	    matrix[i][j]=EMPTY;
@@ -53,7 +54,7 @@ void Grid::move(int key)
 	    {
 			if(matrix[i][j]==matrix[i][j+1])
 			{
-				matrix[i][j+1]*=2;
+				score+=matrix[i][j+1]*=2;
 				matrix[i][j]=EMPTY;
 				++j;
 			}
@@ -101,7 +102,7 @@ void Grid::move(int key)
 	    {
 			if(matrix[i][j]==matrix[i][j-1])
 			{
-				matrix[i][j-1]*=2;
+				score+=matrix[i][j-1]*=2;
 				matrix[i][j]=EMPTY;
 				--j;
 			}
@@ -122,7 +123,7 @@ void Grid::move(int key)
 				--noOfBlanks;
 			}
 	    }
-	}	
+	}
 	break;
 
 	//for up, replace matrix[a][b] with matrix[b][a] in left
@@ -150,7 +151,7 @@ void Grid::move(int key)
 	    {
 			if(matrix[j][i]==matrix[j-1][i])
 			{
-				matrix[j-1][i]*=2;
+				score+=matrix[j-1][i]*=2;
 				matrix[j][i]=EMPTY;
 				--j;
 			}
@@ -197,7 +198,7 @@ void Grid::move(int key)
 	    {
 			if(matrix[j][i]==matrix[j+1][i])
 			{
-				matrix[j+1][i]*=2;
+				score+=matrix[j+1][i]*=2;
 				matrix[j][i]=EMPTY;
 				++j;
 			}
