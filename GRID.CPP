@@ -3,9 +3,19 @@
 Grid::Grid()
 {
      score=0;
+     matrix=new int*[SIZE];
      for(int i=0; i<SIZE; i++)
+     {
+	matrix[i]=new int[SIZE];
 	for(int j=0; j< SIZE; j++)
 	    matrix[i][j]=EMPTY;
+     }
+}
+Grid::~Grid()
+{
+     for(int i=0;i<SIZE;++i)
+	delete matrix[i];
+     delete matrix;
 }
 int Grid::isNextMovePossible()
 {
@@ -252,4 +262,11 @@ void Grid::newNumber()
 	//Update that particular spot with val
 	matrix[ emptyIJ[i][0] ][ emptyIJ[i][1] ]=val;
 }
-
+int** Grid::getMatrix()
+{
+	return matrix;
+}
+int Grid::getScore()
+{
+	return score;
+}

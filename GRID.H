@@ -1,7 +1,9 @@
-#include"constants.h"
+#include"CONSTANT.H"
+
 class Grid
 {
-    int matrix[SIZE][SIZE];
+private:
+    int **matrix;
     int score;
 public:
     //Default constructor to intialize matrix elements to zero
@@ -15,4 +17,12 @@ public:
     int isNextMovePossible();
     //Function to generate a random number at empty space every move
     void newNumber();
+    //Function that returns the matrix as int **
+    //Return value:matrix
+    int** getMatrix();
+    //Function to get the score
+    //Return value: score
+    int getScore();
+    //Destructor to free up 2D array
+    ~Grid();
 };
