@@ -1,6 +1,7 @@
 #include<iostream.h>
 #include<conio.h>
-#include<CONSTANT.H>
+#include"CONSTANT.H"
+#include"GRID.CPP"
 #include<graphics.h>
 #include<stdio.h>
 #include<process.h>
@@ -39,7 +40,7 @@ void main()
     // SAVEDATA.DAT
     int high=0;
     file.open("SAVEDATA.DAT",ios::binary|ios::in|ios::ate);
-    file.read((char*)&high, 2);
+    file.read((char*)&high, sizeof(int));//Stupid fellow . I said dont use raw constants. Here you are taking a machine dependent value as 2 bytes. In 32 bit machines itself its 4 bytesand 8 bytes in 64 bytes.
     //
 
     // Initialize graphics component
