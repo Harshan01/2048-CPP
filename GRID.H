@@ -23,6 +23,8 @@ public:
     //Function to get the score
     //Return value: score
     int getScore();
+    //Function to reset grid
+    void reset();
     //Destructor to free up 2D array
     ~Grid();
 };

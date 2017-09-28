@@ -270,3 +270,12 @@ int Grid::getScore()
 {
 	return score;
 }
+void Grid::reset()
+{
+     score=0;
+     for(int i=0; i<SIZE; i++)
+     {
+	    for(int j=0; j< SIZE; j++)
+		 matrix[i][j]=EMPTY;
+     }
+}
