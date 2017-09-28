@@ -9,9 +9,9 @@
 
 fstream file;
 
-class grid
+class Display
 {
-    int mat[SIZE][SIZE];
+    Grid grid;
 
 public:
 
@@ -27,9 +27,9 @@ public:
 
     void load(); //Load saved game
 
-    int* retmat(){return &mat[0][0];}
+    int** retmat(){return grid.getMatrix();}
 
-    grid();
+    Display();
 
 };
 
@@ -39,19 +39,19 @@ void main()
     // Get the HIGH SCORE for displaying on home screen
     // SAVEDATA.DAT
     int high=0;
-    file.open("SAVEDATA.DAT",ios::binary|ios::in|ios::ate);
-    file.read((char*)&high, sizeof(int));//Stupid fellow . I said dont use raw constants. Here you are taking a machine dependent value as 2 bytes. In 32 bit machines itself its 4 bytesand 8 bytes in 64 bytes.
+    file.open(SAVEPATH,ios::binary|ios::in|ios::ate);
+    file.read((char*)&high, sizeof(int));
     //
 
     // Initialize graphics component
     int gd=DETECT, gm;
     initgraph(&gd,&gm,"C:\\TC\\BGI");
     //
-    grid g;
+    Display g;
     char inp;
     cout<<"\t\t\t2048 GAME\n\n";
     cout<<"HIGH SCORE: "<<high<<"\n\n\n"; //<--high score
-    cout<<"Enter the choice: \n";
+    cout<<"Help:\nN-New game.\nL-Load Game.\nP-Save game.\nX-Exit game.\nUse WASD to move\n";
     cin>>inp;
     switch(inp)
     {
@@ -68,12 +68,13 @@ void main()
 		    break;
     }
     getch();
+	file.close();
     closegraph();
 
 }
 
 
-void grid::paint()
+void Display::paint()
 {
     //Each box dimension is 100px x 100px
     cleardevice();
@@ -89,21 +90,21 @@ void grid::paint()
     {
 	for(int j=0;j<SIZE;j++)
 	{
-	    if(mat[i][j]<0)
+	    if(grid.getMatrix()[i][j]!=EMPTY)
 		outtextxy(startx+100*i+49,starty+100*j+49,"");
 	    else
-		outtextxy(startx+100*i+49,starty+100*j+49,mat[i][j]+"");
+		outtextxy(startx+100*i+49,starty+100*j+49,grid.getMatrix()[i][j]+"");
 	}
     }
 }
 
-int grid::isNextMovePoss()
+int Display::isNextMovePoss()
 {   //Calculation of whether next move is possible or not
 
-    return 0;
+    return grid.isNextMovePossible();
 }
 
-void grid::input()
+void Display::input()
 {
     char inp;
     do
@@ -111,75 +112,67 @@ void grid::input()
 	inp=getch();
 	switch(inp)
 	{
-		case 'n'://NEW GAME
-		case 'N':for(int i=0;i<SIZE;i++)
-			     for(int j=0;j<SIZE;j++)
-				 mat[i][j]=-1;
+		case keyn://NEW GAME
+		case keyN:
+			 grid.reset();
 			 paint();
 			 input();
 			 break;
 
-		case 'p'://SAVE GAME
-		case 'P':save();
+		case keyP://SAVE GAME
+		case keyp:save();
 			 break;
 
-		case 'l'://LOAD GAME
-		case 'L':load();
+		case keyl://LOAD GAME
+		case keyL:load();
 			 break;
 
-		case 'x'://EXIT GAME
-		case 'X':exit(0);
+		/*case keyx://EXIT GAME Instead added at while checking
+		case keyX:exit(0);
+			 break;*/
+
+		case keyw:
+		case keyW:update(UP);
 			 break;
 
-		case 'w':
-		case 'W':update(UP);
+		case keya:
+		case keyA:update(LEFT);
 			 break;
 
-		case 'a':
-		case 'A':update(LEFT);
+		case keys:
+		case keyS:update(DOWN);
 			 break;
 
-		case 's':
-		case 'S':update(DOWN);
-			 break;
-
-		case 'd':
-		case 'D':update(RIGHT);
+		case keyd:
+		case keyD:update(RIGHT);
 			 break;
 	}
-    } while(inp!='w'&&inp!='W'&&inp!='a'&&inp!='A'&&inp!='s'&&inp!='S'&&inp!='d'&&inp!='D');
+    } while(inp!=keyx && inp!=keyX && isNextMovePoss());
+	//***************************************************TODO display gameover message.
 }
 
-void grid::update(int ctrl)
+void Display::update(int ctrl)
 {
     //UPDATE PROCESS
-
+	grid.move(ctrl);
+	paint();
     //Call paint() at end of update
 }
 
-void grid::save()
+void Display::save()
 {
-    file.seekg(2,ios::beg);
-    file.write((char*)this,sizeof(grid));
+    file.seekg(sizeof(int),ios::beg);
+    file.write((char*)&grid,sizeof(grid));
 }
 
-void grid::load()
+void Display::load()
 {
-    file.seekg(2,ios::beg);
-    grid temp;
-    file.read((char*)&temp,sizeof(temp));
-    int *t=temp.retmat();
-    for(int i=0; i<SIZE;i++)
-	for(int j=0;j<SIZE;j++)
-	{
-	    mat[i][j]=*t; t++;
-	}
+    file.seekg(sizeof(int),ios::beg);
+	file.read((char*)&grid,sizeof(grid));
     paint();
 }
 
-grid::grid()
+Display::Display()
 {
-    for(int i=0;i<SIZE;i++)
-	for(int j=0;j<SIZE;j++)
-	    mat[i][j]=-1;
+    
 }
