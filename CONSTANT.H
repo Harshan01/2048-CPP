@@ -1,4 +1,6 @@
 //This file contains all necessary constants for the game.
+
+#ifndef CONSTANTSINCL
 const int SIZE = 3;
 const int LEFT = 75;
 const int RIGHT = 77;
@@ -24,3 +26,6 @@ const char *SAVEPATH="SAVEDATA.DAT";
 #define TRUE 1
 #define FALSE 0
 const int EMPTY= -1;
+const int PIXEL=100;
+#define CONSTANTSINCL
+#endif
