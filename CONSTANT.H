@@ -1,4 +1,5 @@
 //This file contains all necessary constants for the game.
+
 #ifndef CONSTANTSINCL
 
 const int SIZE = 3;
