@@ -1,7 +1,6 @@
 //This file contains all necessary constants for the game.
 
 #ifndef CONSTANTSINCL
-
 const int SIZE = 3;
 const int LEFT = 75;
 const int RIGHT = 77;
