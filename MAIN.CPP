@@ -9,9 +9,9 @@
 
 //fstream file;
 
-/*class grid
+class grid
 {
-    int mat[SIZE][SIZE];
+    Grid gm;
 
 public:
 
@@ -19,16 +19,16 @@ public:
 
     int isNextMovePoss(); //Calculates if next move is possible
 
-    void input(); //Input data from user
+    void input(fstream); //Input data from user
 
     void update(int); //Update the grid tiles and move
 
-    void save(); //Save game and store in binary file
+    void save(fstream); //Save game and store in binary file
 
-    void load(); //Load saved game
+    void load(fstream); //Load saved game
 
     //int* retmat(){return &mat[0][0];}
-};*/
+};
 
 void main()
 {
@@ -45,24 +45,25 @@ void main()
     int gd=DETECT, gm;
     initgraph(&gd,&gm,"C:\\TC\\BGI");
     //
-    Grid g;
+    grid g;
     char inp;
     cout<<"\t\t\t2048 GAME\n\n";
     cout<<"HIGH SCORE: "<<high<<"\n\n\n"; //<--high score
-    cout<<"Enter the choice: \n";
+    cout<<"\n\nHelp: W-up, A-left, S-down, D-right\n\n";	
+    cout<<"Enter the choice: (N-new game , L-load game)\n";
     cin>>inp;
     switch(inp)
     {
 	case keyN:
 	case keyn:   //NEW GAME
 		    g.paint();
-		    g.input();
+		    g.input(file);
 		    break;
 	case keyL:
 	case keyl:   //LOAD GAME
-		    g.load();
+		    g.load(file);
 		    g.paint();
-		    g.input();
+		    g.input(file);
 		    break;
     }
     getch();
@@ -95,13 +96,13 @@ void Grid::paint()
     }
 }
 
-/*int grid::isNextMovePoss()
+int grid::isNextMovePoss()
 {   //Calculation of whether next move is possible or not
     
     return Grid::isNextMovePossible();
-}*/
+}
 
-void Grid::input()
+void grid::input(fstream file)
 {
     char inp;
     do
@@ -114,15 +115,15 @@ void Grid::input()
 			     for(int j=0;j<SIZE;j++)
 				 matrix[i][j]=EMPTY;
 			 paint();
-			 input();
+			 input(file);
 			 break;
 
 		case keyp://SAVE GAME
-		case keyP:save();
+		case keyP:save(file);
 			 break;
 
 		case keyl://LOAD GAME
-		case keyL:load();
+		case keyL:load(file);
 			 break;
 
 		case keyx://EXIT GAME
@@ -148,29 +149,25 @@ void Grid::input()
     } while(inp!=keyw&&inp!=keyW&&inp!=keya&&inp!=keyA&&inp!=keys&&inp!=keyS&&inp!=keyd&&inp!=keyD);
 }
 
-/*void grid::update(int ctrl)
+void grid::update(int ctrl)
 {
     //UPDATE PROCESS
-    Grid::move();
+    gm.move(ctrl);
+    paint();	
     //Call paint() at end of update
-}*/
-
-void Grid::save(fstream file)
-{
-    file.seekg(sizeof(int),ios::beg);
-    file.write((char*)this,sizeof(Grid));
 }
 
-void Grid::load(fstream file)
+void grid::save(fstream file)
 {
     file.seekg(sizeof(int),ios::beg);
-    grid temp;
+    file.write((char*)gm,sizeof(Grid));
+}
+
+void grid::load(fstream file)
+{
+    file.seekg(sizeof(int),ios::beg);
+    Grid temp;
     file.read((char*)&temp,sizeof(temp));
-    int *t=temp.getMatrix();
-    for(int i=0; i<SIZE;i++)
-	for(int j=0;j<SIZE;j++)
-	{
-	    mat[i][j]=t[i][j]; 
-	}
+    gm=temp;
     paint();
 }
