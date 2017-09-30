@@ -36,10 +36,6 @@ public:
       file.close();  
   }
 
-    fstream retfile()
-    {
-        return file;	    
-    }
 };
 
 void main()
@@ -49,8 +45,8 @@ void main()
     // Get the HIGH SCORE for displaying on home screen
     // SAVEDATA.DAT
     int high=0;
-    fstream f=g.retfile();	
-    f.open(*SAVEPATH,ios::binary|ios::in|ios::ate);
+    fstream f;	
+    f.open(SAVEPATH,ios::binary|ios::in|ios::ate);
     f.read((char*)&high, sizeof(int));
 
     // Initialize graphics component
