@@ -7,14 +7,18 @@
 #include<process.h>
 #include<fstream.h>
 
-fstream file;
 
 class Display
 {
-    Grid grid;
+Grid gm; fstream file;
 
 public:
 
+  Display()
+  {
+     file.open(*SAVEPATH,ios::binary|ios::in|ios::ate);
+  }
+  
     void paint(); //Paint the grid
 
     int isNextMovePoss(); //Calculates if next move is possible
@@ -26,49 +30,56 @@ public:
     void save(); //Save game and store in binary file
 
     void load(); //Load saved game
+  
+  void ~Display()
+  {
+      file.close();  
+  }
 
-    int** retmat(){return grid.getMatrix();}
-
-    Display();
-
+    fstream retfile()
+    {
+        return file;	    
+    }
 };
 
 void main()
 {
+    Display g;
     clrscr();
     // Get the HIGH SCORE for displaying on home screen
     // SAVEDATA.DAT
     int high=0;
-    file.open(SAVEPATH,ios::binary|ios::in|ios::ate);
-    file.read((char*)&high, sizeof(int));
-    //
+    fstream f=g.retfile();	
+    f.open(*SAVEPATH,ios::binary|ios::in|ios::ate);
+    f.read((char*)&high, sizeof(int));
 
     // Initialize graphics component
     int gd=DETECT, gm;
     initgraph(&gd,&gm,"C:\\TC\\BGI");
     //
-    Display g;
+
     char inp;
     cout<<"\t\t\t2048 GAME\n\n";
     cout<<"HIGH SCORE: "<<high<<"\n\n\n"; //<--high score
     cout<<"Help:\nN-New game.\nL-Load Game.\nP-Save game.\nX-Exit game.\nUse WASD to move\n";
+
     cin>>inp;
     switch(inp)
     {
-	case 'N':
-	case 'n':   //NEW GAME
+	case keyN:
+	case keyn:   //NEW GAME
 		    g.paint();
 		    g.input();
 		    break;
-	case 'L':
-	case 'l':   //LOAD GAME
+	case keyL:
+	case keyl:   //LOAD GAME
 		    g.load();
 		    g.paint();
 		    g.input();
 		    break;
     }
     getch();
-	file.close();
+	f.close();
     closegraph();
 
 }
@@ -76,13 +87,13 @@ void main()
 
 void Display::paint()
 {
-    //Each box dimension is 100px x 100px
+    
     cleardevice();
-    setfillstyle(SOLID_FILL,BLUE);
-    int startx=getmaxx()/2 - (int)((float)SIZE*100/2);
-    int endx=getmaxx()/2 + (int)((float)SIZE*100/2);
-    int starty=getmaxy()/2 - (int)((float)SIZE*100/2);
-    int endy=getmaxy()/2 + (int)((float)SIZE*100/2);
+    setfillstyle(SOLID_FILL,LIGHTBLUE);
+    int startx=getmaxx()/2 - (int)((float)SIZE*PIXEL/2);
+    int endx=getmaxx()/2 + (int)((float)SIZE*PIXEL/2);
+    int starty=getmaxy()/2 - (int)((float)SIZE*PIXEL/2);
+    int endy=getmaxy()/2 + (int)((float)SIZE*PIXEL/2);
     int vert[]={startx,starty,endx,starty,endx,endy,startx,endy};
     fillpoly(4,vert);
 
@@ -90,10 +101,11 @@ void Display::paint()
     {
 	for(int j=0;j<SIZE;j++)
 	{
-	    if(grid.getMatrix()[i][j]!=EMPTY)
-		outtextxy(startx+100*i+49,starty+100*j+49,"");
+	    if(gm.getMatrix()[i][j]==EMPTY)
+		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEL*j+PIXEL/2,"");
 	    else
-		outtextxy(startx+100*i+49,starty+100*j+49,grid.getMatrix()[i][j]+"");
+		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEl*j+PIXEL/2,gm.getMatrix[i][j]+"");
+
 	}
     }
 }
@@ -101,7 +113,7 @@ void Display::paint()
 int Display::isNextMovePoss()
 {   //Calculation of whether next move is possible or not
 
-    return grid.isNextMovePossible();
+    return gm.isNextMovePossible();
 }
 
 void Display::input()
@@ -115,17 +127,20 @@ void Display::input()
 		case keyn://NEW GAME
 		case keyN:
 			 grid.reset();
+
 			 paint();
 			 input();
 			 break;
 
-		case keyP://SAVE GAME
-		case keyp:save();
+
+		case keyp://SAVE GAME
+		case keyP:save();
 			 break;
 
 		case keyl://LOAD GAME
 		case keyL:load();
 			 break;
+
 
 		/*case keyx://EXIT GAME Instead added at while checking
 		case keyX:exit(0);
@@ -149,30 +164,30 @@ void Display::input()
 	}
     } while(inp!=keyx && inp!=keyX && isNextMovePoss());
 	//***************************************************TODO display gameover message.
+
 }
 
 void Display::update(int ctrl)
 {
     //UPDATE PROCESS
-	grid.move(ctrl);
-	paint();
+    gm.move(ctrl);
+    paint();
+    input();
     //Call paint() at end of update
 }
 
 void Display::save()
 {
     file.seekg(sizeof(int),ios::beg);
-    file.write((char*)&grid,sizeof(grid));
+
+    file.write((char*)&gm,sizeof(Grid));
 }
 
 void Display::load()
 {
     file.seekg(sizeof(int),ios::beg);
-	file.read((char*)&grid,sizeof(grid));
-    paint();
-}
 
-Display::Display()
-{
-    
+    file.read((char*)&gm,sizeof(Grid));
+    //gm=temp;
+    paint();
 }
