@@ -120,8 +120,7 @@ void Display::input()
 		case keyn://NEW GAME
 		case keyN:
 			 grid.reset();
-			 paint();
-			 //input(); I think it May cause infinite recursion unnecessarily!!!
+			 paint
 			 break;
 
 
@@ -156,9 +155,8 @@ void Display::input()
 	}
 	paint();
     } while(inp!=keyx && inp!=keyX && isNextMovePoss());
-	//***************************************************TODO display gameover message.
-if(!isNextMovePoss())
-{
+	//***************************************************display gameover message.
+
     clrscr();
 	cout<<"\n\n\n\t\t\tGAME OVER!!! No other possible moves left! Your score is : "<<gm.getScore();
 	file.seekg(0,ios::beg);
@@ -170,15 +168,13 @@ if(!isNextMovePoss())
 		file.seekg(0,ios::beg);
 	    file.write((char*)&high,sizeof(int));	
 	}
-}
+
 }
 
 void Display::update(int ctrl)
 {
     //UPDATE PROCESS
     gm.move(ctrl);
-    //paint(); Moved to the just before do while ends
-    //input(); Infinite recursion only.
     //Call paint() at end of update
 }
 
