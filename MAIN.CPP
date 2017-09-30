@@ -16,7 +16,7 @@ public:
 
   Display()
   {
-     file.open(*SAVEPATH,ios::binary|ios::in|ios::ate);
+     file.open(SAVEPATH,ios::binary|ios::in|ios::ate);
   }
   
     void paint(); //Paint the grid
