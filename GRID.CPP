@@ -1,5 +1,11 @@
 #include"GRID.H"
+#include"CONSTANT.H"
 #include"stdlib.h"
+int **forRight(int **_2D, int i);
+int action(int **p);
+int **forLeft(int **_2D, int i);
+int **forUp(int **_2D, int i);
+int **forDown(int **_2D, int i);
 Grid::Grid()
 {
      score=0;
@@ -37,201 +43,41 @@ void Grid::move(int key)
     if(!isNextMovePossible())
 	return;
 
-    //Working rule:
-    //In the direction of movement, remove empty space between, add elements if possible, remove empty space again
+    int **p;
     switch(key)
     {
     case RIGHT:
-	for(i=0;i<SIZE; ++i)
-	{
-	    //Step 1: Remove blank spaces at indices >= 1
-	    for(j=1, noOfBlanks=0; j<SIZE;++j)
-			if(matrix[i][j]==EMPTY)
-				noOfBlanks++;
-	    for(j=SIZE-1; j>=1 && noOfBlanks > 0 ;++j)
-	    {
-			if(matrix[i][j]==EMPTY)
-			{
-				for(k=j; k>=1; --k)
-				{
-				matrix[i][k]=matrix[i][k-1];
-				matrix[i][k-1]=EMPTY;
-				}
-				--noOfBlanks;
-			}
-	    }
-	    //Step 2: If two equal numbers are adjacent add them and put in right most
-	    for(j=0; j< SIZE-1; ++j)
-	    {
-			if(matrix[i][j]==matrix[i][j+1])
-			{
-				score+=matrix[i][j+1]*=2;
-				matrix[i][j]=EMPTY;
-				++j;
-			}
-	    }
-	    //Step 3:Remove spaces again
-	    for(j=1, noOfBlanks=0; j<SIZE;++j)
-			if(matrix[i][j]==EMPTY)
-				noOfBlanks++;
-	    for(j=SIZE-1; j>=1 && noOfBlanks > 0 ;++j)
-	    {
-			if(matrix[i][j]==EMPTY)
-			{
-				for(k=j; k>=1; --k)
-				{
-					matrix[i][k]=matrix[i][k-1];
-					matrix[i][k-1]=EMPTY;
-				}
-				--noOfBlanks;
-			}
-	    }
-	}
-	break;
-	//for left
+		for(i=0;i<SIZE; ++i)
+		{
+			p=forRight(matrix, i);
+			score+=action(p);
+			delete p;
+		}
+		break;
 	case LEFT:
-	for(i=0;i<SIZE; ++i)
-	{
-	    //Step 1: Remove blank spaces at indices <= size -2
-	    for(j=SIZE-2, noOfBlanks=0; j>=0;--j)
-			if(matrix[i][j]==EMPTY)
-				noOfBlanks++;
-	    for(j=0; j<=SIZE-2 && noOfBlanks > 0 ;--j)
-	    {
-			if(matrix[i][j]==EMPTY)
-			{
-				for(k=j; k<=SIZE-2; ++k)
-				{
-					matrix[i][k]=matrix[i][k+1];
-					matrix[i][k+1]=EMPTY;
-				}
-				--noOfBlanks;
-			}
-	    }
-	    ////////////////////////////////////////
-	    for(j=SIZE - 1; j> 0; --j)
-	    {
-			if(matrix[i][j]==matrix[i][j-1])
-			{
-				score+=matrix[i][j-1]*=2;
-				matrix[i][j]=EMPTY;
-				--j;
-			}
-	    }
-	    //Step 3:Remove spaces again
-	    for(j=SIZE-2, noOfBlanks=0; j>=0;--j)
-			if(matrix[i][j]==EMPTY)
-				noOfBlanks++;
-	    for(j=0; j<=SIZE-2 && noOfBlanks > 0 ;--j)
-	    {
-			if(matrix[i][j]==EMPTY)
-			{
-				for(k=j; k<=SIZE-2; ++k)
-				{
-				matrix[i][k]=matrix[i][k+1];
-				matrix[i][k+1]=EMPTY;
-				}
-				--noOfBlanks;
-			}
-	    }
-	}
-	break;
-
-	//for up, replace matrix[a][b] with matrix[b][a] in left
+		for(i=0;i<SIZE; ++i)
+		{
+			p=forLeft(matrix, i);
+			score+=action(p);
+			delete p;
+		}
+		break;
 	case UP:
-	for(i=0;i<SIZE; ++i)
-	{
-	    //////////////////////////////////////
-	    for(j=SIZE-2, noOfBlanks=0; j>=0;--j)
-			if(matrix[j][i]==EMPTY)
-				noOfBlanks++;
-	    for(j=0; j<=SIZE-2 && noOfBlanks > 0 ;--j)
-	    {
-			if(matrix[j][i]==EMPTY)
-			{
-				for(k=j; k<=SIZE-2; ++k)
-				{
-					matrix[k][i]=matrix[k+1][i];
-					matrix[k+1][i]=EMPTY;
-				}
-				--noOfBlanks;
-			}
-	    }
-	    ////////////////////////////////////////////
-	    for(j=SIZE - 1; j> 0; --j)
-	    {
-			if(matrix[j][i]==matrix[j-1][i])
-			{
-				score+=matrix[j-1][i]*=2;
-				matrix[j][i]=EMPTY;
-				--j;
-			}
-	    }
-	    /////////////////////////////////
-	     for(j=SIZE-2, noOfBlanks=0; j>=0;--j)
-			if(matrix[j][i]==EMPTY)
-				noOfBlanks++;
-	    for(j=0; j<=SIZE-2 && noOfBlanks > 0 ;--j)
-	    {
-			if(matrix[j][i]==EMPTY)
-			{
-				for(k=j; k<=SIZE-2; ++k)
-				{
-					matrix[k][i]=matrix[k+1][i];
-					matrix[k+1][i]=EMPTY;
-				}
-				--noOfBlanks;
-			}
-	    }
-	}
-	break;
-	 case DOWN:
-	for(i=0;i<SIZE; ++i)
-	{
-	    /////////////////////////
-	    for(j=1, noOfBlanks=0; j<SIZE;++j)
-			if(matrix[j][i]==EMPTY)
-				noOfBlanks++;
-	    for(j=SIZE-1; j>=1 && noOfBlanks > 0 ;++j)
-	    {
-			if(matrix[j][i]==EMPTY)
-			{
-				for(k=j; k>=1; --k)
-				{
-				matrix[k][i]=matrix[k-1][i];
-				matrix[k-1][i]=EMPTY;
-				}
-				--noOfBlanks;
-			}
-	    }
-	   ///////////////
-	    for(j=0; j< SIZE-1; ++j)
-	    {
-			if(matrix[j][i]==matrix[j+1][i])
-			{
-				score+=matrix[j+1][i]*=2;
-				matrix[j][i]=EMPTY;
-				++j;
-			}
-	    }
-	     /////////////////////////
-	    for(j=1, noOfBlanks=0; j<SIZE;++j)
-			if(matrix[j][i]==EMPTY)
-				noOfBlanks++;
-	    for(j=SIZE-1; j>=1 && noOfBlanks > 0 ;++j)
-	    {
-			if(matrix[j][i]==EMPTY)
-			{
-				for(k=j; k>=1; --k)
-				{
-				matrix[k][i]=matrix[k-1][i];
-				matrix[k-1][i]=EMPTY;
-				}
-				--noOfBlanks;
-			}
-	    }
-	}
-	break;
+		for(i=0;i<SIZE; ++i)
+		{
+			p=forUp(matrix, i);
+			score+=action(p);
+			delete p;
+		}
+		break;
+	case DOWN:
+		for(i=0;i<SIZE; ++i)
+		{
+			p=forDown(matrix, i);
+			score+=action(p);
+			delete p;
+		}
+		break;
 	}
 	//Call newNumber to generate a random number somewhere.
 	newNumber();
@@ -278,4 +124,71 @@ void Grid::reset()
 	    for(int j=0; j< SIZE; j++)
 		 matrix[i][j]=EMPTY;
      }
+}
+int **forRight(int **_2D, int i)//SIZExSIZE, to delete return value after ysing
+{
+	int **p=new int*[SIZE];
+	for(int j=0;j<SIZE;++j)
+		p[j]=&_2D[i][j];
+	return p;
+}
+int **forLeft(int **_2D, int i)//SIZExSIZE, to delete return value after ysing
+{
+	int **p=new int*[SIZE];
+	for(int j=SIZE-1;j>=0;--j)
+		p[j]=&_2D[i][j];
+	return p;
+}
+int **forUp(int **_2D, int j)//SIZExSIZE, to delete return value after ysing
+{
+	int **p=new int*[SIZE];
+	for(int i=0;i<SIZE;++i)
+		p[i]=&_2D[i][j];
+	return p;
+}
+int **forDown(int **_2D, int j)//SIZExSIZE, to delete return value after ysing
+{
+	int **p=new int*[SIZE];
+	for(int i=SIZE-1 ; j>=0 ; --j)
+		p[i]=&_2D[i][j];
+	return p;
+}
+void removeEmpty(int **p)
+{
+	int i, j, noOfBlanks;
+	for(i=1, noOfBlanks=0; i<SIZE;++i)
+		if(*p[i]==EMPTY)
+			noOfBlanks++;
+	for(i=SIZE-1; i>=1 && noOfBlanks > 0 ;++i)
+	{
+		if(*p[i]==EMPTY)
+		{
+			for(j=i; j>=1; --j)
+			{
+				*p[j]=*p[j-1];
+				*p[j-1]=EMPTY;
+			}
+			--noOfBlanks;
+		}
+	}
+}
+
+int action(int **p)
+{
+	int i, addScore;
+	//Step 1: Remove blank spaces at indices >= 1
+	removeEmpty(p);
+	//Step 2: If two equal numbers are adjacent add them and put in right most
+	for(i=0; i< SIZE-1; ++i)
+	{
+		if(*p[i]==*p[i+1])
+		{
+			addScore=(*p[i+1])*=2;
+			*p[i]=EMPTY;
+			++i;
+		}
+	}
+	//Step 3: Remove blank spaces again
+	removeEmpty(p);
+	return addScore;
 }
