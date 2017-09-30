@@ -17,7 +17,7 @@ public:
 
   Display()
   {
-     file.open(SAVEPATH,ios::binary|ios::in|ios::ate);//SAVEPATH itself is char * only
+     file.open(SAVEPATH,ios::binary|ios::in|ios::ate);
   }
   
     void paint(); //Paint the grid
@@ -37,10 +37,6 @@ public:
       file.close();  
   }
 
-    fstream retfile()
-    {
-        return file;	    
-    }
 };
 
 void main()
@@ -50,8 +46,9 @@ void main()
     // Get the HIGH SCORE for displaying on home screen
     // SAVEDATA.DAT
     int high=0;
-    fstream f=g.retfile();	
-    f.open(SAVEPATH, ios::binary|ios::in|ios::ate);
+    fstream f;	
+    f.open(SAVEPATH,ios::binary|ios::in|ios::ate);
+    f.seekg(0,ios::beg);
     f.read((char*)&high, sizeof(int));
 
     // Initialize graphics component
@@ -160,7 +157,20 @@ void Display::input()
 	paint();
     } while(inp!=keyx && inp!=keyX && isNextMovePoss());
 	//***************************************************TODO display gameover message.
-
+if(!isNextMovePoss())
+{
+    clrscr();
+	cout<<"\n\n\n\t\t\tGAME OVER!!! No other possible moves left! Your score is : "<<gm.getScore();
+	file.seekg(0,ios::beg);
+	int high;
+	file.read((char*)&high, sizeof(int));
+	if(gm.getScore()>high)
+	{
+	    cout<<"\n\n\nNEW HIGH SCORE!!!";
+		file.seekg(0,ios::beg);
+	    file.write((char*)&high,sizeof(int));	
+	}
+}
 }
 
 void Display::update(int ctrl)
