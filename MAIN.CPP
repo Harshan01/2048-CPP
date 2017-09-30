@@ -7,11 +7,10 @@
 #include<process.h>
 #include<fstream.h>
 
-//fstream file;
 
 class grid
 {
-    Grid gm;
+    Grid gm; fstream file;
 
 public:
 
@@ -19,33 +18,38 @@ public:
 
     int isNextMovePoss(); //Calculates if next move is possible
 
-    void input(fstream); //Input data from user
+    void input(); //Input data from user
 
     void update(int); //Update the grid tiles and move
 
-    void save(fstream); //Save game and store in binary file
+    void save(); //Save game and store in binary file
 
-    void load(fstream); //Load saved game
+    void load(); //Load saved game
+	
+    fstream retfile()
+    {
+        return file;	    
+    }
 
-    //int* retmat(){return &mat[0][0];}
 };
 
 void main()
 {
+    grid g;
     clrscr();
     // Get the HIGH SCORE for displaying on home screen
     // SAVEDATA.DAT
     int high=0;
-    fstream file;	
-    file.open(*SAVEPATH,ios::binary|ios::in|ios::ate);
-    file.read((char*)&high, sizeof(int));
+    fstream f=g.retfile();	
+    f.open(*SAVEPATH,ios::binary|ios::in|ios::ate);
+    f.read((char*)&high, sizeof(int));
     //
 
     // Initialize graphics component
     int gd=DETECT, gm;
     initgraph(&gd,&gm,"C:\\TC\\BGI");
     //
-    grid g;
+    
     char inp;
     cout<<"\t\t\t2048 GAME\n\n";
     cout<<"HIGH SCORE: "<<high<<"\n\n\n"; //<--high score
@@ -57,13 +61,13 @@ void main()
 	case keyN:
 	case keyn:   //NEW GAME
 		    g.paint();
-		    g.input(file);
+		    g.input();
 		    break;
 	case keyL:
 	case keyl:   //LOAD GAME
-		    g.load(file);
+		    g.load();
 		    g.paint();
-		    g.input(file);
+		    g.input();
 		    break;
     }
     getch();
@@ -72,7 +76,7 @@ void main()
 }
 
 
-void Grid::paint()
+void grid::paint()
 {
     
     cleardevice();
@@ -102,7 +106,7 @@ int grid::isNextMovePoss()
     return Grid::isNextMovePossible();
 }
 
-void grid::input(fstream file)
+void grid::input()
 {
     char inp;
     do
@@ -115,15 +119,15 @@ void grid::input(fstream file)
 			     for(int j=0;j<SIZE;j++)
 				 matrix[i][j]=EMPTY;
 			 paint();
-			 input(file);
+			 input();
 			 break;
 
 		case keyp://SAVE GAME
-		case keyP:save(file);
+		case keyP:save();
 			 break;
 
 		case keyl://LOAD GAME
-		case keyL:load(file);
+		case keyL:load();
 			 break;
 
 		case keyx://EXIT GAME
@@ -146,28 +150,29 @@ void grid::input(fstream file)
 		case keyD:update(RIGHT);
 			 break;
 	}
-    } while(inp!=keyw&&inp!=keyW&&inp!=keya&&inp!=keyA&&inp!=keys&&inp!=keyS&&inp!=keyd&&inp!=keyD);
+    } while(inp!=keyx&&inp!=keyX&&isNextMovePoss());
 }
 
 void grid::update(int ctrl)
 {
     //UPDATE PROCESS
     gm.move(ctrl);
-    paint();	
+    paint();
+    input(file);
     //Call paint() at end of update
 }
 
-void grid::save(fstream file)
+void grid::save()
 {
     file.seekg(sizeof(int),ios::beg);
     file.write((char*)gm,sizeof(Grid));
 }
 
-void grid::load(fstream file)
+void grid::load()
 {
     file.seekg(sizeof(int),ios::beg);
-    Grid temp;
-    file.read((char*)&temp,sizeof(temp));
-    gm=temp;
+    
+    file.read((char*)&gm,sizeof(Grid));
+    //gm=temp;
     paint();
 }
