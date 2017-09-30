@@ -32,7 +32,7 @@ public:
 
     void load(); //Load saved game
   
-  ~Display()//High level 'high'
+  void ~Display()
   {
       file.close();  
   }
@@ -51,8 +51,7 @@ void main()
     if(!f)
     {
 	    f.open(SAVEPATH, ios::binary|ios::out);
-	    int a=0;
-	    f.write((char*)&a, sizeof(int));
+	    f.write((char*)&int(0), sizeof(int));
 	    Grid t;
 	    f.write((char *)&t, sizeof(Grid));
     }
@@ -61,7 +60,7 @@ void main()
 
     // Initialize graphics component
     int gd=DETECT, gm;
-    initgraph(&gd,&gm,"C:\\TC\\BGI");
+    initgraph(&gd,&gm,"C:\\TurboC3\\BGI");
     //
 
     char inp;
@@ -105,7 +104,7 @@ void Display::paint()
 	    if(gm.getMatrix()[i][j]==EMPTY)
 		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEL*j+PIXEL/2,"");
 	    else
-		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEL*j+PIXEL/2,gm.getMatrix()[i][j]+""); 
+		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEl*j+PIXEL/2,gm.getMatrix()[i][j]+"");
 
 	}
     }
@@ -127,8 +126,8 @@ void Display::input()
 	{
 		case keyn://NEW GAME
 		case keyN:
-			 gm.reset();
-			 paint();
+			 grid.reset();
+			 paint
 			 break;
 
 
