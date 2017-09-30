@@ -10,7 +10,8 @@
 
 class Display
 {
-Grid gm; fstream file;
+	Grid gm;
+	fstream file;
 
 public:
 
@@ -63,20 +64,15 @@ void main()
     cin>>inp;
     switch(inp)
     {
-	case keyN:
-	case keyn:   //NEW GAME
-		    g.paint();
-		    g.input();
-		    break;
 	case keyL:
 	case keyl:   //LOAD GAME
 		    g.load();
-		    g.paint();
-		    g.input();
 		    break;
     }
+    g.paint();
+    g.input();
     getch();
-	f.close();
+    f.close();
     closegraph();
 
 }
@@ -124,9 +120,8 @@ void Display::input()
 		case keyn://NEW GAME
 		case keyN:
 			 grid.reset();
-
 			 paint();
-			 input();
+			 //input(); I think it May cause infinite recursion unnecessarily!!!
 			 break;
 
 
@@ -159,6 +154,7 @@ void Display::input()
 		case keyD:update(RIGHT);
 			 break;
 	}
+	paint();
     } while(inp!=keyx && inp!=keyX && isNextMovePoss());
 	//***************************************************TODO display gameover message.
 if(!isNextMovePoss())
@@ -181,8 +177,8 @@ void Display::update(int ctrl)
 {
     //UPDATE PROCESS
     gm.move(ctrl);
-    paint();
-    input();
+    //paint(); Moved to the just before do while ends
+    //input(); Infinite recursion only.
     //Call paint() at end of update
 }
 
@@ -199,5 +195,5 @@ void Display::load()
 
     file.read((char*)&gm,sizeof(Grid));
     //gm=temp;
-    paint();
+    //paint(); Moved to before do while ends
 }
