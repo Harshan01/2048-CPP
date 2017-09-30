@@ -105,7 +105,7 @@ void Display::paint()
 	    if(gm.getMatrix()[i][j]==EMPTY)
 		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEL*j+PIXEL/2,"");
 	    else
-		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEL*j+PIXEL/2,gm.getMatrix[i][j]+""); //Just what is this??
+		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEL*j+PIXEL/2,gm.getMatrix()[i][j]+""); 
 
 	}
     }
