@@ -103,7 +103,7 @@ void grid::paint()
 int grid::isNextMovePoss()
 {   //Calculation of whether next move is possible or not
     
-    return Grid::isNextMovePossible();
+    return gm.isNextMovePossible();
 }
 
 void grid::input()
