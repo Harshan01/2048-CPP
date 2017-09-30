@@ -8,12 +8,17 @@
 #include<fstream.h>
 
 
-class grid
+class Display
 {
-    Grid gm; fstream file;
+Grid gm; fstream file;
 
 public:
 
+  Display()
+  {
+     file.open(*SAVEPATH,ios::binary|ios::in|ios::ate);
+  }
+  
     void paint(); //Paint the grid
 
     int isNextMovePoss(); //Calculates if next move is possible
@@ -25,17 +30,21 @@ public:
     void save(); //Save game and store in binary file
 
     void load(); //Load saved game
-	
+  
+  void ~Display()
+  {
+      file.close();  
+  }
+
     fstream retfile()
     {
         return file;	    
     }
-
 };
 
 void main()
 {
-    grid g;
+    Display g;
     clrscr();
     // Get the HIGH SCORE for displaying on home screen
     // SAVEDATA.DAT
@@ -43,18 +52,17 @@ void main()
     fstream f=g.retfile();	
     f.open(*SAVEPATH,ios::binary|ios::in|ios::ate);
     f.read((char*)&high, sizeof(int));
-    //
 
     // Initialize graphics component
     int gd=DETECT, gm;
     initgraph(&gd,&gm,"C:\\TC\\BGI");
     //
-    
+
     char inp;
     cout<<"\t\t\t2048 GAME\n\n";
     cout<<"HIGH SCORE: "<<high<<"\n\n\n"; //<--high score
-    cout<<"\n\nHelp: W-up, A-left, S-down, D-right\n\n";	
-    cout<<"Enter the choice: (N-new game , L-load game)\n";
+    cout<<"Help:\nN-New game.\nL-Load Game.\nP-Save game.\nX-Exit game.\nUse WASD to move\n";
+
     cin>>inp;
     switch(inp)
     {
@@ -71,12 +79,13 @@ void main()
 		    break;
     }
     getch();
+	f.close();
     closegraph();
 
 }
 
 
-void grid::paint()
+void Display::paint()
 {
     
     cleardevice();
@@ -92,21 +101,22 @@ void grid::paint()
     {
 	for(int j=0;j<SIZE;j++)
 	{
-	    if(mat[i][j]==EMPTY)
+	    if(gm.getMatrix()[i][j]==EMPTY)
 		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEL*j+PIXEL/2,"");
 	    else
-		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEl*j+PIXEL/2,matrix[i][j]+"");
+		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEl*j+PIXEL/2,gm.getMatrix[i][j]+"");
+
 	}
     }
 }
 
-int grid::isNextMovePoss()
+int Display::isNextMovePoss()
 {   //Calculation of whether next move is possible or not
-    
+
     return gm.isNextMovePossible();
 }
 
-void grid::input()
+void Display::input()
 {
     char inp;
     do
@@ -115,12 +125,13 @@ void grid::input()
 	switch(inp)
 	{
 		case keyn://NEW GAME
-		case keyN:for(int i=0;i<SIZE;i++)
-			     for(int j=0;j<SIZE;j++)
-				 matrix[i][j]=EMPTY;
+		case keyN:
+			 grid.reset();
+
 			 paint();
 			 input();
 			 break;
+
 
 		case keyp://SAVE GAME
 		case keyP:save();
@@ -130,9 +141,10 @@ void grid::input()
 		case keyL:load();
 			 break;
 
-		case keyx://EXIT GAME
+
+		/*case keyx://EXIT GAME Instead added at while checking
 		case keyX:exit(0);
-			 break;
+			 break;*/
 
 		case keyw:
 		case keyW:update(UP);
@@ -150,10 +162,12 @@ void grid::input()
 		case keyD:update(RIGHT);
 			 break;
 	}
-    } while(inp!=keyx&&inp!=keyX&&isNextMovePoss());
+    } while(inp!=keyx && inp!=keyX && isNextMovePoss());
+	//***************************************************TODO display gameover message.
+
 }
 
-void grid::update(int ctrl)
+void Display::update(int ctrl)
 {
     //UPDATE PROCESS
     gm.move(ctrl);
@@ -162,16 +176,17 @@ void grid::update(int ctrl)
     //Call paint() at end of update
 }
 
-void grid::save()
+void Display::save()
 {
     file.seekg(sizeof(int),ios::beg);
-    file.write((char*)gm,sizeof(Grid));
+
+    file.write((char*)&gm,sizeof(Grid));
 }
 
-void grid::load()
+void Display::load()
 {
     file.seekg(sizeof(int),ios::beg);
-    
+
     file.read((char*)&gm,sizeof(Grid));
     //gm=temp;
     paint();
