@@ -24,3 +24,4 @@ const char *SAVEPATH="SAVEDATA.DAT";
 #define TRUE 1
 #define FALSE 0
 const int EMPTY= -1;
+const int PIXEL=100
