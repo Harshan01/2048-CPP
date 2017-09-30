@@ -48,6 +48,13 @@ void main()
     int high=0;
     fstream f;	
     f.open(SAVEPATH,ios::binary|ios::in|ios::ate);
+    if(!f)
+    {
+	    f.open(SAVEPATH, ios::binary|ios::out);
+	    f.write((char*)&int(0), sizeof(int));
+	    Grid t;
+	    f.write((char *)&t, sizeof(Grid));
+    }
     f.seekg(0,ios::beg);
     f.read((char*)&high, sizeof(int));
 
