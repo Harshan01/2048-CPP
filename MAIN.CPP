@@ -7,9 +7,9 @@
 #include<process.h>
 #include<fstream.h>
 
-fstream file;
+//fstream file;
 
-class grid
+/*class grid
 {
     int mat[SIZE][SIZE];
 
@@ -27,11 +27,8 @@ public:
 
     void load(); //Load saved game
 
-    int* retmat(){return &mat[0][0];}
-
-    grid();
-
-};
+    //int* retmat(){return &mat[0][0];}
+};*/
 
 void main()
 {
@@ -39,7 +36,8 @@ void main()
     // Get the HIGH SCORE for displaying on home screen
     // SAVEDATA.DAT
     int high=0;
-    file.open("SAVEDATA.DAT",ios::binary|ios::in|ios::ate);
+    fstream file;	
+    file.open(*SAVEPATH,ios::binary|ios::in|ios::ate);
     file.read((char*)&high, sizeof(int));
     //
 
@@ -47,7 +45,7 @@ void main()
     int gd=DETECT, gm;
     initgraph(&gd,&gm,"C:\\TC\\BGI");
     //
-    grid g;
+    Grid g;
     char inp;
     cout<<"\t\t\t2048 GAME\n\n";
     cout<<"HIGH SCORE: "<<high<<"\n\n\n"; //<--high score
@@ -55,13 +53,13 @@ void main()
     cin>>inp;
     switch(inp)
     {
-	case 'N':
-	case 'n':   //NEW GAME
+	case keyN:
+	case keyn:   //NEW GAME
 		    g.paint();
 		    g.input();
 		    break;
-	case 'L':
-	case 'l':   //LOAD GAME
+	case keyL:
+	case keyl:   //LOAD GAME
 		    g.load();
 		    g.paint();
 		    g.input();
@@ -73,15 +71,15 @@ void main()
 }
 
 
-void grid::paint()
+void Grid::paint()
 {
-    //Each box dimension is 100px x 100px
+    
     cleardevice();
-    setfillstyle(SOLID_FILL,BLUE);
-    int startx=getmaxx()/2 - (int)((float)SIZE*100/2);
-    int endx=getmaxx()/2 + (int)((float)SIZE*100/2);
-    int starty=getmaxy()/2 - (int)((float)SIZE*100/2);
-    int endy=getmaxy()/2 + (int)((float)SIZE*100/2);
+    setfillstyle(SOLID_FILL,LIGHTBLUE);
+    int startx=getmaxx()/2 - (int)((float)SIZE*PIXEL/2);
+    int endx=getmaxx()/2 + (int)((float)SIZE*PIXEL/2);
+    int starty=getmaxy()/2 - (int)((float)SIZE*PIXEL/2);
+    int endy=getmaxy()/2 + (int)((float)SIZE*PIXEL/2);
     int vert[]={startx,starty,endx,starty,endx,endy,startx,endy};
     fillpoly(4,vert);
 
@@ -89,21 +87,21 @@ void grid::paint()
     {
 	for(int j=0;j<SIZE;j++)
 	{
-	    if(mat[i][j]<0)
-		outtextxy(startx+100*i+49,starty+100*j+49,"");
+	    if(mat[i][j]==EMPTY)
+		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEL*j+PIXEL/2,"");
 	    else
-		outtextxy(startx+100*i+49,starty+100*j+49,mat[i][j]+"");
+		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEl*j+PIXEL/2,matrix[i][j]+"");
 	}
     }
 }
 
-int grid::isNextMovePoss()
+/*int grid::isNextMovePoss()
 {   //Calculation of whether next move is possible or not
+    
+    return Grid::isNextMovePossible();
+}*/
 
-    return 0;
-}
-
-void grid::input()
+void Grid::input()
 {
     char inp;
     do
@@ -111,75 +109,68 @@ void grid::input()
 	inp=getch();
 	switch(inp)
 	{
-		case 'n'://NEW GAME
-		case 'N':for(int i=0;i<SIZE;i++)
+		case keyn://NEW GAME
+		case keyN:for(int i=0;i<SIZE;i++)
 			     for(int j=0;j<SIZE;j++)
-				 mat[i][j]=-1;
+				 matrix[i][j]=EMPTY;
 			 paint();
 			 input();
 			 break;
 
-		case 'p'://SAVE GAME
-		case 'P':save();
+		case keyp://SAVE GAME
+		case keyP:save();
 			 break;
 
-		case 'l'://LOAD GAME
-		case 'L':load();
+		case keyl://LOAD GAME
+		case keyL:load();
 			 break;
 
-		case 'x'://EXIT GAME
-		case 'X':exit(0);
+		case keyx://EXIT GAME
+		case keyX:exit(0);
 			 break;
 
-		case 'w':
-		case 'W':update(UP);
+		case keyw:
+		case keyW:update(UP);
 			 break;
 
-		case 'a':
-		case 'A':update(LEFT);
+		case keya:
+		case keyA:update(LEFT);
 			 break;
 
-		case 's':
-		case 'S':update(DOWN);
+		case keys:
+		case keyS:update(DOWN);
 			 break;
 
-		case 'd':
-		case 'D':update(RIGHT);
+		case keyd:
+		case keyD:update(RIGHT);
 			 break;
 	}
-    } while(inp!='w'&&inp!='W'&&inp!='a'&&inp!='A'&&inp!='s'&&inp!='S'&&inp!='d'&&inp!='D');
+    } while(inp!=keyw&&inp!=keyW&&inp!=keya&&inp!=keyA&&inp!=keys&&inp!=keyS&&inp!=keyd&&inp!=keyD);
 }
 
-void grid::update(int ctrl)
+/*void grid::update(int ctrl)
 {
     //UPDATE PROCESS
-
+    Grid::move();
     //Call paint() at end of update
-}
+}*/
 
-void grid::save()
+void Grid::save(fstream file)
 {
     file.seekg(sizeof(int),ios::beg);
-    file.write((char*)this,sizeof(grid));
+    file.write((char*)this,sizeof(Grid));
 }
 
-void grid::load()
+void Grid::load(fstream file)
 {
     file.seekg(sizeof(int),ios::beg);
     grid temp;
     file.read((char*)&temp,sizeof(temp));
-    int *t=temp.retmat();
+    int *t=temp.getMatrix();
     for(int i=0; i<SIZE;i++)
 	for(int j=0;j<SIZE;j++)
 	{
-	    mat[i][j]=*t; t++;
+	    mat[i][j]=t[i][j]; 
 	}
     paint();
-}
-
-grid::grid()
-{
-    for(int i=0;i<SIZE;i++)
-	for(int j=0;j<SIZE;j++)
-	    mat[i][j]=-1;
 }
