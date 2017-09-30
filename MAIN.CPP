@@ -158,7 +158,7 @@ void grid::update(int ctrl)
     //UPDATE PROCESS
     gm.move(ctrl);
     paint();
-    input(file);
+    input();
     //Call paint() at end of update
 }
 
