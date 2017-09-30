@@ -175,7 +175,7 @@ void removeEmpty(int **p)
 
 int action(int **p)
 {
-	int i, addScore;
+	int i, addScore=0;
 	//Step 1: Remove blank spaces at indices >= 1
 	removeEmpty(p);
 	//Step 2: If two equal numbers are adjacent add them and put in right most
@@ -183,7 +183,7 @@ int action(int **p)
 	{
 		if(*p[i]==*p[i+1])
 		{
-			addScore=(*p[i+1])*=2;
+			addScore+=(*p[i+1])*=2;
 			*p[i]=EMPTY;
 			++i;
 		}
