@@ -40,7 +40,7 @@ void main()
     // SAVEDATA.DAT
     int high=0;
     file.open("SAVEDATA.DAT",ios::binary|ios::in|ios::ate);
-    file.read((char*)&high, sizeof(int));//Stupid fellow . I said dont use raw constants. Here you are taking a machine dependent value as 2 bytes. In 32 bit machines itself its 4 bytesand 8 bytes in 64 bytes.
+    file.read((char*)&high, sizeof(int));
     //
 
     // Initialize graphics component
@@ -159,13 +159,13 @@ void grid::update(int ctrl)
 
 void grid::save()
 {
-    file.seekg(2,ios::beg);
+    file.seekg(sizeof(int),ios::beg);
     file.write((char*)this,sizeof(grid));
 }
 
 void grid::load()
 {
-    file.seekg(2,ios::beg);
+    file.seekg(sizeof(int),ios::beg);
     grid temp;
     file.read((char*)&temp,sizeof(temp));
     int *t=temp.retmat();
