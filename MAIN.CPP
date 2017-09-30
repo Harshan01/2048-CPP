@@ -32,7 +32,7 @@ public:
 
     void load(); //Load saved game
   
-  void ~Display()
+  ~Display()//High level 'high'
   {
       file.close();  
   }
@@ -51,7 +51,8 @@ void main()
     if(!f)
     {
 	    f.open(SAVEPATH, ios::binary|ios::out);
-	    f.write((char*)&int(0), sizeof(int));
+	    int a=0;
+	    f.write((char*)&a, sizeof(int));
 	    Grid t;
 	    f.write((char *)&t, sizeof(Grid));
     }
@@ -104,7 +105,7 @@ void Display::paint()
 	    if(gm.getMatrix()[i][j]==EMPTY)
 		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEL*j+PIXEL/2,"");
 	    else
-		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEl*j+PIXEL/2,gm.getMatrix[i][j]+"");
+		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEL*j+PIXEL/2,gm.getMatrix[i][j]+""); //Just what is this??
 
 	}
     }
@@ -126,8 +127,8 @@ void Display::input()
 	{
 		case keyn://NEW GAME
 		case keyN:
-			 grid.reset();
-			 paint
+			 gm.reset();
+			 paint();
 			 break;
 
 
