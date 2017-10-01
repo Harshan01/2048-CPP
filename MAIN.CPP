@@ -185,15 +185,16 @@ void Display::input()
 	//***************************************************display gameover message.
 
     clrscr();
-	cout<<"\n\n\n\t\t\tGAME OVER!!! No other possible moves left! Your score is : "<<gm.getScore();
+	int score=gm.getScore();
+	cout<<"\n\n\nGAME OVER!!! No other possible moves left! \nYour score is : "<<score;
 	file.seekg(0,ios::beg);
 	int high;
 	file.read((char*)&high, sizeof(int));
-	if(gm.getScore()>high)
+	if(score>high)
 	{
 	    cout<<"\n\n\nNEW HIGH SCORE!!!";
 		file.seekg(0,ios::beg);
-	    file.write((char*)&high,sizeof(int));
+	    file.write((char*)&score,sizeof(int));
 	}
 
 }
