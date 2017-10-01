@@ -108,7 +108,7 @@ void Display::paint()
 	    if(gm.getMatrix()[i][j]==EMPTY)
 		outtextxy(startx+PIXEL*j+PIXEL/2,starty+PIXEL*i+PIXEL/2," ");
 	    else
-		outtextxy(startx+PIXEL*j+PIXEL/2,starty+PIXEL*i+PIXEL/2,(const char *)memcpy(&gm.getMatrix()[i][j], temp, sizeof(int)));
+		outtextxy(startx+PIXEL*j+PIXEL/2,starty+PIXEL*i+PIXEL/2,(const char *)memcpy(temp, &gm.getMatrix()[i][j], sizeof(int)));
 
 	}
     }
