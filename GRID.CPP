@@ -16,6 +16,7 @@ Grid::Grid()
 	for(int j=0; j< SIZE; j++)
 	    matrix[i][j]=EMPTY;
      }
+     newNumber();
 }
 Grid::~Grid()
 {
@@ -124,6 +125,7 @@ void Grid::reset()
 	    for(int j=0; j< SIZE; j++)
 		 matrix[i][j]=EMPTY;
      }
+     newNumber();
 }
 int **forRight(int **_2D, int i)//SIZExSIZE, to delete return value after ysing
 {
@@ -181,7 +183,7 @@ int action(int **p)
 	//Step 2: If two equal numbers are adjacent add them and put in right most
 	for(i=0; i< SIZE-1; ++i)
 	{
-		if(*p[i]==*p[i+1])
+		if(*p[i]==*p[i+1] && *p[i]!=EMPTY)
 		{
 			addScore+=(*p[i+1])*=2;
 			*p[i]=EMPTY;
