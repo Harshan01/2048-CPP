@@ -189,7 +189,7 @@ int action(int **p)
 	//Step 2: If two equal numbers are adjacent add them and put in right most
 	for(i=SIZE-1; i>=0; --i)
 	{
-		if(*p[i]==*p[i-1])
+		if(*p[i]==*p[i-1]&&*p[i]!=EMPTY)
 		{
 			addScore+=(*p[i])*=2;
 			*p[i-1]=EMPTY;
