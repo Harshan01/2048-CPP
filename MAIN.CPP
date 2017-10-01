@@ -58,21 +58,21 @@ void main()
     f.seekg(0,ios::beg);
     f.read((char*)&high, sizeof(int));
 
-    
+
 
     char inp;
     cout<<"\t\t\t2048 GAME\n\n";
     cout<<"HIGH SCORE: "<<high<<"\n\n\n"; //<--high score
-    cout<<"Help:\nN-New game.\nL-Load Game.\nP-Save game.\nX-Exit game.\nUse WASD to move\n";
-
-    cin>>inp;
+    cout<<"Help:\nN-New game.\nL-Load Game.\nP-Save game.\nX-Exit game.\nUse WASD to move\nPress any key to Start";
+    getch();
+   /* cin>>inp;
     switch(inp)
     {
 	case keyL:
 	case keyl:   //LOAD GAME
 		    g.load();
 		    break;
-    }
+    }*/
     // Initialize graphics component
     int gd=DETECT, gm;
     initgraph(&gd,&gm,"C:\\TurboC3\\BGI");
@@ -97,6 +97,7 @@ void Display::paint()
     int endy=getmaxy()/2 + (int)((float)SIZE*PIXEL/2);
     int vert[]={startx,starty,endx,starty,endx,endy,startx,endy};
     fillpoly(4,vert);
+    char *temp;
 
     for(int i=0;i<SIZE;i++)
     {
@@ -104,11 +105,12 @@ void Display::paint()
 	    line(startx+PIXEL*i, starty, startx+PIXEL*i, endy);
 	for(int j=0;j<SIZE;j++)
 	{
-		
+
+	    sprintf(temp, "%d", gm.getMatrix()[i][j]);
 	    if(gm.getMatrix()[i][j]==EMPTY)
 		outtextxy(startx+PIXEL*j+PIXEL/2,starty+PIXEL*i+PIXEL/2," ");
 	    else
-		outtextxy(startx+PIXEL*j+PIXEL/2,starty+PIXEL*i+PIXEL/2,(const char *)memcpy(temp, &gm.getMatrix()[i][j], sizeof(int)));
+		outtextxy(startx+PIXEL*j+PIXEL/2,starty+PIXEL*i+PIXEL/2,temp);
 
 	}
     }
