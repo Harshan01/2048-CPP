@@ -29,10 +29,14 @@ int Grid::isNextMovePossible()
     //IF any box empty or any two adjacent elements in matrix are equal then possible.
     //Checking of that is not implemented efficiently, can be optimized later.
     int i, j;
+	for(i=0;i<SIZE;++i)
+		for(j=0;j<SIZE;++j)
+			if(matrix[i][j]==EMPTY)
+				return TRUE;
     for(i=0; i< SIZE-1; ++i)
     {
 	for(j=0; j< SIZE-1; ++j)
-	    if(matrix[i][j]==EMPTY || matrix[i][j] == matrix[i+1][j] ||
+	    if(matrix[i][j] == matrix[i+1][j] ||
 		matrix[i][j] == matrix[i][j+1])
 			return TRUE;
     }
@@ -98,6 +102,8 @@ void Grid::newNumber()
 				noOfBlanks++;
 			}
 		}
+	if(noOfBlanks==0)
+		return;
 	//Generate two random numbers one for 2 or 4, other which will indicate position in the array.
 	randomize();
 	int val=random(4);//val takes 0,1,2,3
