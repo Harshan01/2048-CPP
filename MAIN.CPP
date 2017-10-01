@@ -20,7 +20,7 @@ public:
 
   Display()
   {
-     file.open(SAVEPATH, ios::binary | ios::in | ios::ate);
+     file.open(SAVEPATH, ios::binary | ios::in | ios::ate | ios::out);
      startx=getmaxx()/2 - (int)(SIZE*PIXEL/2);
      endx=getmaxx()/2 + (int)(SIZE*PIXEL/2);
      starty=getmaxy()/2 - (int)(SIZE*PIXEL/2);
@@ -53,10 +53,10 @@ void main()
     // SAVEDATA.DAT
     int high=0;
     fstream f;
-    f.open(SAVEPATH,ios::binary|ios::in|ios::ate);
+    f.open(SAVEPATH,ios::binary|ios::in|ios::ate|ios::out);
     if(!f)
     {
-	    f.open(SAVEPATH, ios::binary|ios::out);
+	    f.open(SAVEPATH, ios::binary|ios::out|ios::in|ios::ate);
 	    f.write((char*)(new int(0)), sizeof(int));
 	    Grid t;
 	    f.write((char *)&t, sizeof(Grid));
