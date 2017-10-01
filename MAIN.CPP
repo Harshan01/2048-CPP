@@ -100,12 +100,15 @@ void Display::paint()
 
     for(int i=0;i<SIZE;i++)
     {
+	    line(startx, starty+PIXEL*i, endx, starty+PIXEL*i);
+	    line(startx+PIXEL*i, starty, startx+PIXEL*i, endy);
 	for(int j=0;j<SIZE;j++)
 	{
+		
 	    if(gm.getMatrix()[i][j]==EMPTY)
-		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEL*j+PIXEL/2," ");
+		outtextxy(startx+PIXEL*j+PIXEL/2,starty+PIXEL*i+PIXEL/2," ");
 	    else
-		outtextxy(startx+PIXEL*i+PIXEL/2,starty+PIXEL*j+PIXEL/2,(const char *)memcpy(&gm.getMatrix()[i][j], temp, sizeof(int)));
+		outtextxy(startx+PIXEL*j+PIXEL/2,starty+PIXEL*i+PIXEL/2,(const char *)memcpy(temp, &gm.getMatrix()[i][j], sizeof(int)));
 
 	}
     }
