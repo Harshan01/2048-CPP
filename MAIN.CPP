@@ -274,7 +274,10 @@ void Grid::move(int key)
 	getch();*/
     if(!isNextMovePossible())
 	return;
-
+int temp[SIZE][SIZE];
+	for(i=0;i<SIZE;i++)
+		for(j=0;j<SIZE;j++)
+			temp[i][j]=matrix[i][j];
 /*    outtextxy(20, 10, "next move possible");
 	getch();*/
     int **p;
@@ -316,7 +319,12 @@ void Grid::move(int key)
 		break;
 	}
 	//Call newNumber to generate a random number somewhere.
-	newNumber();
+	
+	for(i=0;i<SIZE;i++)
+		for(j=0;j<SIZE;j++)
+			if(temp[i][j]!=matrix[i][j])
+			{     newNumber(); break; }
+	
 }
 void Grid::newNumber()
 {
