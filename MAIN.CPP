@@ -12,12 +12,17 @@ class Display
 {
 	Grid gm;
 	fstream file;
+	int startx,starty,endx,endy;
 
 public:
 
   Display()
   {
      file.open(SAVEPATH,ios::binary|ios::in|ios::ate);
+     startx=getmaxx()/2 - (int)((float)SIZE*PIXEL/2);
+     endx=getmaxx()/2 + (int)((float)SIZE*PIXEL/2);
+     starty=getmaxy()/2 - (int)((float)SIZE*PIXEL/2);
+     endy=getmaxy()/2 + (int)((float)SIZE*PIXEL/2);
   }
   
     void paint(); //Paint the grid
@@ -41,7 +46,6 @@ public:
 
 void main()
 {
-    Display g;
     clrscr();
     // Get the HIGH SCORE for displaying on home screen
     // SAVEDATA.DAT
@@ -77,6 +81,7 @@ void main()
     int gd=DETECT, gm;
     initgraph(&gd,&gm,"C:\\TurboC3\\BGI");
     //
+    Display g;
     g.paint();
     g.input();
     getch();
@@ -90,19 +95,17 @@ void Display::paint()
 {
     
     cleardevice();
-    setfillstyle(SOLID_FILL,LIGHTBLUE);
-    int startx=getmaxx()/2 - (int)((float)SIZE*PIXEL/2);
-    int endx=getmaxx()/2 + (int)((float)SIZE*PIXEL/2);
-    int starty=getmaxy()/2 - (int)((float)SIZE*PIXEL/2);
-    int endy=getmaxy()/2 + (int)((float)SIZE*PIXEL/2);
-    int vert[]={startx,starty,endx,starty,endx,endy,startx,endy};
-    fillpoly(4,vert);
+    //setfillstyle(SOLID_FILL,LIGHTBLUE);
+    
+    //int vert[]={startx,starty,endx,starty,endx,endy,startx,endy};
+    //fillpoly(4,vert);
+    rectangle(startx,starty,endx,endy);	
     char *temp;
 
     for(int i=0;i<SIZE;i++)
     {
-	    line(startx, starty+PIXEL*i, endx, starty+PIXEL*i);
-	    line(startx+PIXEL*i, starty, startx+PIXEL*i, endy);
+	    line(startx, starty+PIXEL*(i+1), endx, starty+PIXEL*(i+1));
+	    line(startx+PIXEL*(i+1), starty, startx+PIXEL*(i+1), endy);
 	for(int j=0;j<SIZE;j++)
 	{
 
