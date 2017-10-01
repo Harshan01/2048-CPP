@@ -58,21 +58,21 @@ void main()
     f.seekg(0,ios::beg);
     f.read((char*)&high, sizeof(int));
 
-    
+
 
     char inp;
     cout<<"\t\t\t2048 GAME\n\n";
     cout<<"HIGH SCORE: "<<high<<"\n\n\n"; //<--high score
-    cout<<"Help:\nN-New game.\nL-Load Game.\nP-Save game.\nX-Exit game.\nUse WASD to move\n";
-
-    cin>>inp;
+    cout<<"Help:\nN-New game.\nL-Load Game.\nP-Save game.\nX-Exit game.\nUse WASD to move\nPress any key to Start";
+    getch();
+   /* cin>>inp;
     switch(inp)
     {
 	case keyL:
 	case keyl:   //LOAD GAME
 		    g.load();
 		    break;
-    }
+    }*/
     // Initialize graphics component
     int gd=DETECT, gm;
     initgraph(&gd,&gm,"C:\\TurboC3\\BGI");
@@ -97,7 +97,7 @@ void Display::paint()
     int endy=getmaxy()/2 + (int)((float)SIZE*PIXEL/2);
     int vert[]={startx,starty,endx,starty,endx,endy,startx,endy};
     fillpoly(4,vert);
-    char temp[10];
+    char *temp;
 
     for(int i=0;i<SIZE;i++)
     {
