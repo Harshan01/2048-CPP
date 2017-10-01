@@ -16,6 +16,7 @@ Grid::Grid()
 	for(int j=0; j< SIZE; j++)
 	    matrix[i][j]=EMPTY;
      }
+     newNumber();
 }
 Grid::~Grid()
 {
@@ -124,6 +125,7 @@ void Grid::reset()
 	    for(int j=0; j< SIZE; j++)
 		 matrix[i][j]=EMPTY;
      }
+     newNumber();
 }
 int **forRight(int **_2D, int i)//SIZExSIZE, to delete return value after ysing
 {
@@ -136,21 +138,21 @@ int **forLeft(int **_2D, int i)//SIZExSIZE, to delete return value after ysing
 {
 	int **p=new int*[SIZE];
 	for(int j=SIZE-1;j>=0;--j)
-		p[j]=&_2D[i][j];
+		p[j]=&_2D[i][SIZE-1-j];
 	return p;
 }
-int **forUp(int **_2D, int j)//SIZExSIZE, to delete return value after ysing
+int **forDown(int **_2D, int j)//SIZExSIZE, to delete return value after ysing
 {
 	int **p=new int*[SIZE];
 	for(int i=0;i<SIZE;++i)
 		p[i]=&_2D[i][j];
 	return p;
 }
-int **forDown(int **_2D, int j)//SIZExSIZE, to delete return value after ysing
+int **forUp(int **_2D, int j)//SIZExSIZE, to delete return value after ysing
 {
 	int **p=new int*[SIZE];
-	for(int i=SIZE-1 ; j>=0 ; --j)
-		p[i]=&_2D[i][j];
+	for(int i=SIZE-1 ; i>=0 ; --i)
+		p[i]=&_2D[SIZE-1-i][j];
 	return p;
 }
 void removeEmpty(int **p)
@@ -159,7 +161,7 @@ void removeEmpty(int **p)
 	for(i=1, noOfBlanks=0; i<SIZE;++i)
 		if(*p[i]==EMPTY)
 			noOfBlanks++;
-	for(i=SIZE-1; i>=1 && noOfBlanks > 0 ;++i)
+	for(i=SIZE-1; i>=1 && noOfBlanks > 0 ;--i)
 	{
 		if(*p[i]==EMPTY)
 		{
@@ -179,13 +181,13 @@ int action(int **p)
 	//Step 1: Remove blank spaces at indices >= 1
 	removeEmpty(p);
 	//Step 2: If two equal numbers are adjacent add them and put in right most
-	for(i=0; i< SIZE-1; ++i)
+	for(i=SIZE-1; i>=0; --i)
 	{
-		if(*p[i]==*p[i+1])
+		if(*p[i]==*p[i-1])
 		{
-			addScore+=(*p[i+1])*=2;
-			*p[i]=EMPTY;
-			++i;
+			addScore+=(*p[i])*=2;
+			*p[i-1]=EMPTY;
+			--i;
 		}
 	}
 	//Step 3: Remove blank spaces again
