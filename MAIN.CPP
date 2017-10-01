@@ -319,12 +319,13 @@ int temp[SIZE][SIZE];
 		break;
 	}
 	//Call newNumber to generate a random number somewhere.
-	
+	int flag=FALSE;
 	for(i=0;i<SIZE;i++)
 		for(j=0;j<SIZE;j++)
 			if(temp[i][j]!=matrix[i][j])
-			{     newNumber(); break; }
-	
+			{     flag=TRUE; break; }
+	if(flag==TRUE)
+		newNumber();
 }
 void Grid::newNumber()
 {
