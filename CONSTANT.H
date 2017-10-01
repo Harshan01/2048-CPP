@@ -22,7 +22,7 @@ const int keyS='S';
 const int keys='s';
 const int keyD='D';
 const int keyd='d';
-const char *SAVEPATH="SAVEDATA.DAT";
+//const char *SAVEPATH="SAVEDATA.DAT";
 #define TRUE 1
 #define FALSE 0
 const int EMPTY= -1;
