@@ -90,7 +90,7 @@ void main()
     g.input();
     getch();
     f.close();
-//    closegraph();
+    closegraph();
 
 }
 
@@ -189,11 +189,12 @@ void Display::input()
 	paint();
     } while(inp!=keyx && inp!=keyX && isNextMovePoss());
     outtextxy(endx-40, starty-35, "Game Over! Press any key.");
-    getch();
+    inp=getch();
+    cleardevice();
 	//***************************************************display gameover message.
   //  cleardevice();
-    closegraph();
-    clrscr();
+
+   // clrscr();
 	int score=gm.getScore();
 	cout<<"\n\n\nGAME OVER!!!\nYour score is : "<<score;
 	file.seekg(0,ios::beg);
@@ -267,11 +268,16 @@ int Grid::isNextMovePossible()
 		for(j=0;j<SIZE;++j)
 			if(matrix[i][j]==EMPTY)
 				return TRUE;
-    for(i=0; i< SIZE-1; ++i)
+    for(i=0; i< SIZE; ++i)
     {
 	for(j=0; j< SIZE-1; ++j)
-	    if(matrix[i][j] == matrix[i+1][j] ||
-		matrix[i][j] == matrix[i][j+1])
+	    if(	matrix[i][j] == matrix[i][j+1])
+			return TRUE;
+    }
+	for(i=0; i< SIZE-1; ++i)
+    {
+	for(j=0; j< SIZE; ++j)
+	    if(matrix[i][j] == matrix[i+1][j] )
 			return TRUE;
     }
     return FALSE;
