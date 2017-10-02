@@ -54,7 +54,7 @@ void main()
     // SAVEDATA.DAT
     int high=0;
     fstream f;
-    f.open(SAVEPATH,ios::binary|ios::in|ios::ate|ios::out);
+    f.open(SAVEPATH,ios::binary|ios::in|ios::ate);
     if(!f)
     {
 	    f.open(SAVEPATH, ios::binary|ios::out|ios::in|ios::ate);
@@ -64,7 +64,7 @@ void main()
     }
     f.seekg(0,ios::beg);
     f.read((char*)&high, sizeof(int));
-
+    randomize();
 
 
     char inp;
@@ -103,8 +103,12 @@ void Display::paint()
     //int vert[]={startx,starty,endx,starty,endx,endy,startx,endy};
     //fillpoly(4,vert);
     rectangle(startx,starty,endx,endy);
-    char temp[10];
-
+    char temp[10], sc[10];
+    settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 4);
+    strcpy(temp, "Score :");
+    itoa(gm.getScore(), sc, 10);
+    strcat(temp, sc);
+    outtextxy(startx, starty-25, temp);
     for(int i=0;i<SIZE;i++)
     {
 	    line(startx, starty+PIXEL*(i+1), endx, starty+PIXEL*(i+1));
@@ -183,8 +187,10 @@ void Display::input()
 	getch();*/
 	paint();
     } while(inp!=keyx && inp!=keyX && isNextMovePoss());
+    outtextxy(endx-40, starty-10, "Press any key.");
+    getch();
 	//***************************************************display gameover message.
-
+    cleardevice();
     clrscr();
 	int score=gm.getScore();
 	cout<<"\n\n\nGAME OVER!!! No other possible moves left! \nYour score is : "<<score;
@@ -197,6 +203,8 @@ void Display::input()
 		file.seekg(0,ios::beg);
 	    file.write((char*)&score,sizeof(int));
 	}
+	else
+	    cout<<"\n\n\nHigh score:"<<high;
 
 }
 
@@ -210,7 +218,7 @@ void Display::update(int ctrl)
 
 void Display::save()
 {
-    file.seekg(sizeof(int),ios::beg);
+    file.seekp(sizeof(int),ios::beg);
 
     file.write((char*)&gm,sizeof(Grid));
 }
@@ -334,7 +342,7 @@ void Grid::newNumber()
 	//Make an array of (i,j) where boxes are empty
 	int emptyIJ[SIZE*SIZE][2];
 	for(i=0; i< SIZE; ++i)
-		for(j=0; j< SIZE; ++j)
+	{	for(j=0; j< SIZE; ++j)
 		{
 			if(matrix[i][j]==EMPTY)
 			{
@@ -343,19 +351,20 @@ void Grid::newNumber()
 				noOfBlanks++;
 			}
 		}
+	}
 	if(noOfBlanks==0)
 		return;
 	//Generate two random numbers one for 2 or 4, other which will indicate position in the array.
-	randomize();
+
 	int val=random(4);//val takes 0,1,2,3
 	if(val==3)
 		val=4;
 	else
 		val=2;
-	randomize();
-	i=random(noOfBlanks);
+
+	i=rand()%noOfBlanks;
 	//Update that particular spot with val
-	matrix[ emptyIJ[i][0] ][ emptyIJ[i][1] ]=val;
+	matrix[ (emptyIJ[i][0]) ][ (emptyIJ[i][1]) ]=val;
 }
 int** Grid::getMatrix()
 {
