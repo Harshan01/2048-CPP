@@ -84,6 +84,7 @@ void main()
     int gd=DETECT, gm;
     initgraph(&gd,&gm,"C:\\TurboC3\\BGI");
     //
+    settextstyle(14, HORIZ_DIR, 1);
     Display g;
     g.paint();
     g.input();
