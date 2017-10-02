@@ -54,7 +54,7 @@ void main()
     // SAVEDATA.DAT
     int high=0;
     fstream f;
-    f.open(SAVEPATH,ios::binary|ios::in|ios::ate|ios::out);
+    f.open(SAVEPATH,ios::binary|ios::in|ios::ate);
     if(!f)
     {
 	    f.open(SAVEPATH, ios::binary|ios::out|ios::in|ios::ate);
@@ -64,7 +64,7 @@ void main()
     }
     f.seekg(0,ios::beg);
     f.read((char*)&high, sizeof(int));
-
+    randomize();
 
 
     char inp;
@@ -334,7 +334,7 @@ void Grid::newNumber()
 	//Make an array of (i,j) where boxes are empty
 	int emptyIJ[SIZE*SIZE][2];
 	for(i=0; i< SIZE; ++i)
-		for(j=0; j< SIZE; ++j)
+	{	for(j=0; j< SIZE; ++j)
 		{
 			if(matrix[i][j]==EMPTY)
 			{
@@ -343,19 +343,20 @@ void Grid::newNumber()
 				noOfBlanks++;
 			}
 		}
+	}
 	if(noOfBlanks==0)
 		return;
 	//Generate two random numbers one for 2 or 4, other which will indicate position in the array.
-	randomize();
+
 	int val=random(4);//val takes 0,1,2,3
 	if(val==3)
 		val=4;
 	else
 		val=2;
-	randomize();
-	i=random(noOfBlanks);
+
+	i=rand()%noOfBlanks;
 	//Update that particular spot with val
-	matrix[ emptyIJ[i][0] ][ emptyIJ[i][1] ]=val;
+	matrix[ (emptyIJ[i][0]) ][ (emptyIJ[i][1]) ]=val;
 }
 int** Grid::getMatrix()
 {
