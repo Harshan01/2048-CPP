@@ -9,6 +9,7 @@
 #include<process.h>
 #include<fstream.h>
 
+char *SAVEPATH="SAVEDATA.DAT";
 
 class Display
 {
