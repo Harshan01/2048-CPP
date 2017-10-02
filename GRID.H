@@ -1,5 +1,5 @@
 #include"CONSTANT.H"
-
+#include<fstream.h>
 class Grid
 {
 private:
@@ -25,6 +25,11 @@ public:
     int getScore();
     //Function to reset grid
     void reset();
+	//functions  to read/write from/into files
+   void save(fstream &file);
+   void load(fstream &file);
     //Destructor to free up 2D array
     ~Grid();
 };
+//ostream& operator<<(ostream&, Grid&);
+//istream& operator>>(istream&, Grid&);
