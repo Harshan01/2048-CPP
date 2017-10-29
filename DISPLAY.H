@@ -1,19 +1,16 @@
 #ifndef DISPLAYHPP
 #define DISPLAYHPP
 
-
-#include<string.h>
-#include<graphics.h>
 #include"CONSTANT.H"
 #include"GRID.H"
 
-char *SAVEPATH="SAVEDATA.DAT";
+char *SAVEPATH = "SAVEDATA.DAT";
 
 class Display
 {
+protected:
 	Grid gm;
 	fstream file;
-	int startx,starty,endx,endy;
 
 public:
 
