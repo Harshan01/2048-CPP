@@ -1,5 +1,16 @@
+#ifndef GRIDHPP
+#define GRIDHPP
+
 #include"CONSTANT.H"
-#include<fstream.h>
+
+#include<stdlib.h>
+
+int **forRight(int **_2D, int i);
+int action(int **p);
+int **forLeft(int **_2D, int i);
+int **forUp(int **_2D, int i);
+int **forDown(int **_2D, int i);
+
 class Grid
 {
 private:
@@ -33,3 +44,4 @@ public:
 };
 //ostream& operator<<(ostream&, Grid&);
 //istream& operator>>(istream&, Grid&);
+#endif

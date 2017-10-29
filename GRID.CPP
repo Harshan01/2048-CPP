@@ -1,11 +1,9 @@
+#ifndef GRIDCPP
+#define GRIDCPP
+
 #include"GRID.H"
-#include"CONSTANT.H"
-#include"stdlib.h"
-int **forRight(int **_2D, int i);
-int action(int **p);
-int **forLeft(int **_2D, int i);
-int **forUp(int **_2D, int i);
-int **forDown(int **_2D, int i);
+#include<fstream.h>
+
 Grid::Grid()
 {
      score=0;
@@ -33,11 +31,16 @@ int Grid::isNextMovePossible()
 		for(j=0;j<SIZE;++j)
 			if(matrix[i][j]==EMPTY)
 				return TRUE;
-    for(i=0; i< SIZE-1; ++i)
+    for(i=0; i< SIZE; ++i)
     {
 	for(j=0; j< SIZE-1; ++j)
-	    if(matrix[i][j] == matrix[i+1][j] ||
-		matrix[i][j] == matrix[i][j+1])
+	    if(	matrix[i][j] == matrix[i][j+1])
+			return TRUE;
+    }
+	for(i=0; i< SIZE-1; ++i)
+    {
+	for(j=0; j< SIZE; ++j)
+	    if(matrix[i][j] == matrix[i+1][j] )
 			return TRUE;
     }
     return FALSE;
@@ -45,9 +48,16 @@ int Grid::isNextMovePossible()
 void Grid::move(int key)
 {
     int i,j, k, noOfBlanks;
+  /*  outtextxy(10, 20, "reached move");
+	getch();*/
     if(!isNextMovePossible())
 	return;
-
+int temp[SIZE][SIZE];
+	for(i=0;i<SIZE;i++)
+		for(j=0;j<SIZE;j++)
+			temp[i][j]=matrix[i][j];
+/*    outtextxy(20, 10, "next move possible");
+	getch();*/
     int **p;
     switch(key)
     {
@@ -57,7 +67,9 @@ void Grid::move(int key)
 			p=forRight(matrix, i);
 			score+=action(p);
 			delete p;
+		  //	outtextxy(10, 10, "2");
 		}
+//		outtextxy(10, 10, "3");
 		break;
 	case LEFT:
 		for(i=0;i<SIZE; ++i)
@@ -85,7 +97,13 @@ void Grid::move(int key)
 		break;
 	}
 	//Call newNumber to generate a random number somewhere.
-	newNumber();
+	int flag=FALSE;
+	for(i=0;i<SIZE;i++)
+		for(j=0;j<SIZE;j++)
+			if(temp[i][j]!=matrix[i][j])
+			{     flag=TRUE; break; }
+	if(flag==TRUE)
+		newNumber();
 }
 void Grid::newNumber()
 {
@@ -93,7 +111,7 @@ void Grid::newNumber()
 	//Make an array of (i,j) where boxes are empty
 	int emptyIJ[SIZE*SIZE][2];
 	for(i=0; i< SIZE; ++i)
-		for(j=0; j< SIZE; ++j)
+	{	for(j=0; j< SIZE; ++j)
 		{
 			if(matrix[i][j]==EMPTY)
 			{
@@ -102,22 +120,43 @@ void Grid::newNumber()
 				noOfBlanks++;
 			}
 		}
+	}
 	if(noOfBlanks==0)
 		return;
 	//Generate two random numbers one for 2 or 4, other which will indicate position in the array.
-	randomize();
+
 	int val=random(4);//val takes 0,1,2,3
 	if(val==3)
 		val=4;
 	else
 		val=2;
-	i=random(noOfBlanks);
+
+	i=rand()%noOfBlanks;
 	//Update that particular spot with val
-	matrix[ emptyIJ[i][0] ][ emptyIJ[i][1] ]=val;
+	matrix[ (emptyIJ[i][0]) ][ (emptyIJ[i][1]) ]=val;
 }
 int** Grid::getMatrix()
 {
 	return matrix;
+}
+//io functions to class Grid
+void Grid::save(fstream &file)
+{
+	file.write((char *)&score, sizeof(int));
+	//int **m=g.getMatrix();
+	for(int i=0; i<SIZE; ++i)
+		for(int j=0; j<SIZE; ++j)
+			file.write((char *)&matrix[i][j], sizeof(int));
+
+}
+void Grid::load(fstream &file)
+{
+	file.read((char *)&score, sizeof(int));
+	//int **m=g.getMatrix();
+	for(int i=0; i<SIZE; ++i)
+		for(int j=0; j<SIZE; ++j)
+			file.read((char *)&matrix[i][j], sizeof(int));
+	//return file;
 }
 int Grid::getScore()
 {
@@ -189,7 +228,7 @@ int action(int **p)
 	//Step 2: If two equal numbers are adjacent add them and put in right most
 	for(i=SIZE-1; i>=0; --i)
 	{
-		if(*p[i]==*p[i-1]&&*p[i]!=EMPTY)
+		if(*p[i]==*p[i-1]&& *p[i] != EMPTY)
 		{
 			addScore+=(*p[i])*=2;
 			*p[i-1]=EMPTY;
@@ -200,3 +239,4 @@ int action(int **p)
 	removeEmpty(p);
 	return addScore;
 }
+#endif
