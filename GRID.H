@@ -1,5 +1,15 @@
+#ifndef GRIDHPP
+#define GRIDHPP
+
 #include"CONSTANT.H"
-#include<fstream.h>
+
+
+int **forRight(int **_2D, int i);
+int action(int **p);
+int **forLeft(int **_2D, int i);
+int **forUp(int **_2D, int i);
+int **forDown(int **_2D, int i);
+
 class Grid
 {
 private:
@@ -31,5 +41,4 @@ public:
     //Destructor to free up 2D array
     ~Grid();
 };
-//ostream& operator<<(ostream&, Grid&);
-//istream& operator>>(istream&, Grid&);
+#endif
