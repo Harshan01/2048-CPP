@@ -3,12 +3,12 @@
 
 #include"CONSTANT.H"
 
-
-int **forRight(int **_2D, int i);
+int **forDirection(int **matrix, int, int);
+int **forRight(int **matrix, int i);
+int **forLeft(int **matrix, int i);
+int **forUp(int **matrix, int i);
+int **forDown(int **matrix, int i);
 int action(int **p);
-int **forLeft(int **_2D, int i);
-int **forUp(int **_2D, int i);
-int **forDown(int **_2D, int i);
 
 class Grid
 {
@@ -16,29 +16,16 @@ private:
     int **matrix;
     int score;
 public:
-    //Default constructor to intialize matrix elements to zero
+//Refer GRID.CPP for comments regarding what the functions do.
     Grid();
-    //Function is called when a move is made so as to update the matrix
-    //Arguments: int key- integer specifying the direction . ref constants.h
     void move(int key);
-    //Function is called to know if next move is possible.
-    //Return value: TRUE if possible
-    //		  : FALSE if not
     int isNextMovePossible();
-    //Function to generate a random number at empty space every move
     void newNumber();
-    //Function that returns the matrix as int **
-    //Return value:matrix
     int** getMatrix();
-    //Function to get the score
-    //Return value: score
     int getScore();
-    //Function to reset grid
     void reset();
-	//functions  to read/write from/into files
-   void save(fstream &file);
-   void load(fstream &file);
-    //Destructor to free up 2D array
+	void save(fstream &file);
+    void load(fstream &file);
     ~Grid();
 };
 #endif
