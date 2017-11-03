@@ -73,40 +73,11 @@ void Grid :: move(int key)
 	**before any another assignment to the pointer.
 	**/
     int **p;
-    switch(key)
-    {
-    case RIGHT:
-		for(i = 0; i < SIZE; ++i)
-		{
-			p = forRight(matrix, i);
-			score += action(p);
-			delete p;
-		}
-		break;
-	case LEFT:
-		for(i = 0; i < SIZE; ++i)
-		{
-			p = forLeft(matrix, i);
-			score += action(p);
-			delete p;
-		}
-		break;
-	case UP:
-		for(i = 0; i < SIZE; ++i)
-		{
-			p = forUp(matrix, i);
-			score += action(p);
-			delete p;
-		}
-		break;
-	case DOWN:
-		for(i = 0; i < SIZE; ++i)
-		{
-			p = forDown(matrix, i);
-			score += action(p);
-			delete p;
-		}
-		break;
+	for(i = 0; i < SIZE; ++i)
+	{
+		p = forDirection(matrix, key, i);
+		score += action(p);
+		delete p;
 	}
 	//Call newNumber to generate a random number somewhere, if move was actually made.
 	int flag=FALSE;
@@ -119,6 +90,7 @@ void Grid :: move(int key)
 	if(flag)
 		newNumber();
 }
+
 
 //This function is called to generate a random number somewhere in the matrix.
 void Grid :: newNumber()
@@ -153,8 +125,7 @@ void Grid :: newNumber()
 	matrix[ (emptyIJ[i][0]) ][ (emptyIJ[i][1]) ]=val;
 }
 
-int** Grid :: getMatrix()
-{
+int** Grid :: getMatrix() {
 	return matrix;
 }
 
@@ -176,8 +147,7 @@ void Grid :: load(fstream &file)
 			file.read((char *)&matrix[i][j], sizeof(int));
 }
 
-int Grid :: getScore()
-{
+int Grid :: getScore() {
 	return score;
 }
 
@@ -199,6 +169,17 @@ void Grid :: reset()
 ** and the ith row or column as argument and creates an array of pointers on which if right move 
 ** is performed becomes equivalent.
 **/
+int** forDirection(int** matrix, int direction, int i)
+{
+	switch(direction)
+	{
+		//break statement not needed here.
+		case UP: return forUp(matrix, i);
+		case DOWN: return forDown(matrix, i);
+		case LEFT: return forLeft(matrix, i);
+		case RIGHT: return forRight(matrix, i);
+	}
+}
 int **forRight(int **_2D, int i)//SIZExSIZE, to delete return value after ysing
 {
 	int **p = new int*[SIZE];
@@ -230,15 +211,20 @@ int **forUp(int **_2D, int j)//SIZExSIZE, to delete return value after ysing
 
 //This function takes an array of pointers (representing eq. right array) and pushes elements to right
 // removing blanks.
+//This removes blank spaces at indices >= 1.
 void removeEmpty(int **p)
 {
 	int i, j, noOfBlanks;
+	//Since many blanks may be consecutive, counting no of blanks and then looping for each one will be
+	//better than looping each element.
 	for(i = 1, noOfBlanks = 0; i < SIZE; ++i)
 		if(*p[i] == EMPTY)
 			noOfBlanks++;
+		
 	for(i = SIZE - 1; noOfBlanks > 0 ;)
 	{
-		//If any empty cell is encountered, shift the entire array in the left to the right by 1 place.
+		//If any empty cell is encountered, shift the entire array in the left to the right by 1 place,
+		//leaving the leftmost one with an EMPTY.
 		if(*p[i] == EMPTY)
 		{
 			for(j = i; j >= 1; --j)
@@ -248,12 +234,14 @@ void removeEmpty(int **p)
 			}
 			--noOfBlanks;
 		}
+		//Else, move on to the next cell.
 		else
 			--i;
 	}
 }
 
 //This takes the equivalent right movable array of pointers and performs the right move.
+//Returns the resultant increase in score.
 int action(int **p)
 {
 	int i, addScore = 0;
