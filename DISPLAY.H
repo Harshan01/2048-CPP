@@ -9,7 +9,7 @@ char *SAVEPATH = "SAVEDATA.DAT";
 class Display
 {
 protected:
-	Grid gm;
+	Grid grid;
 	fstream file;
 
 public:
@@ -17,8 +17,6 @@ public:
 	Display();
 
     void paint(); //Paint the grid
-
-    int isNextMovePoss(); //Calculates if next move is possible
 
     void input(); //Input data from user
 
