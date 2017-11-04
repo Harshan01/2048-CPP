@@ -133,6 +133,8 @@ int** Grid :: getMatrix() {
 void Grid :: save(fstream &file)
 {
 	file.write((char *)&score, sizeof(int));
+	//Writing the 2D array in one step will only write the address of the first element.
+	//So elements should be written piece-wise.
 	for(int i = 0; i < SIZE; ++i)
 		for(int j = 0; j < SIZE; ++j)
 			file.write((char *)&matrix[i][j], sizeof(int));

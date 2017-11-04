@@ -21,7 +21,7 @@ void Display::paint()
 	//Flush existing screen contents.
 	clrscr();
 	
-	cout << "\n\n\n\n\t\tScore : " << gm.getScore() << endl;
+	cout << "\n\n\n\n\t\tScore : " << grid.getScore() << endl;
 	
 	//SIZE+1 rowBreaks needed . so one out of loop
 	cout << "\t\t" << rowBreak << endl <<"\t\t";
@@ -29,7 +29,7 @@ void Display::paint()
 	{
 		for( j = 0 ; j < SIZE ; ++j)
 		{
-			val = gm.getMatrix()[i][j];
+			val = grid.getMatrix()[i][j];
 			cout << colBreak ;
 			if(val == EMPTY)
 				cout << setw(3) << " ";
@@ -53,7 +53,7 @@ void Display :: input()
 		{
 		case keyn://NEW GAME
 		case keyN:
-			gm.reset();
+			grid.reset();
 			paint();
 			break;
 
@@ -88,11 +88,11 @@ void Display :: input()
 			break;
 		}
 		paint();
-	} while(inp != keyx && inp != keyX && isNextMovePoss());
+	} while(inp != keyx && inp != keyX && grid.isNextMovePossible());
 	//Display game over message, high score(update if new highscore is made) and stuff.
 	cout << "Game Over! Press any key.";
 	inp = getch();
-	int score = gm.getScore();
+	int score = grid.getScore();
 	clrscr();
 	cout << "\n\n\nGAME OVER!!!\nYour score is : " << score;
 	file.seekg(0, ios::beg);
@@ -108,26 +108,21 @@ void Display :: input()
 		cout << "\n\n\nHigh score:" << high;
 }
 
-int Display :: isNextMovePoss()
-{  
-	return gm.isNextMovePossible();
-}
-
 void Display :: update(int ctrl)
 {
-    gm.move(ctrl);    
+    grid.move(ctrl);    
 }
 
 void Display :: save()
 {
     file.seekp(sizeof(int), ios::beg);
-    gm.save(file);
+    grid.save(file);
 }
 
 void Display :: load()
 {
     file.seekg(sizeof(int), ios::beg);
-    gm.load(file);
+    grid.load(file);
 }
 Display :: ~Display()
 {
