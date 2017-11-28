@@ -20,24 +20,26 @@ void Display::paint()
 	strcat(rowBreak, "----+");
 	//Flush existing screen contents.
 	clrscr();
-	
-	cout << "\n\n\n\n\t\tScore : " << grid.getScore() << endl;
+	constream cout;
+	char tab_space[] = "                ";
+	cout << setclr(LIGHT_RED);
+	cout << "\n\n\n\n" << tab_space << "Score : " << grid.getScore() << endl;
 	
 	//SIZE+1 rowBreaks needed . so one out of loop
-	cout << "\t\t" << rowBreak << endl <<"\t\t";
+	cout << setclr(LIGHT_GREEN) << tab_space << rowBreak << endl << tab_space;
 	for(i = 0 ; i < SIZE ; ++i)
 	{
 		for( j = 0 ; j < SIZE ; ++j)
 		{
 			val = grid.getMatrix()[i][j];
-			cout << colBreak ;
+			cout << setclr(LIGHT_GREEN) << colBreak << setclr(LIGHT_AQUA);
 			if(val == EMPTY)
 				cout << setw(3) << " ";
 			else
 				cout << setw(3) << val;
 		}
 		//SIZE+1  colBreaks also needed. Similarly,
-		cout << colBreak << endl << "\t\t" << rowBreak << endl <<"\t\t";
+		cout << setclr(LIGHT_GREEN) << colBreak << endl << tab_space << rowBreak << endl << tab_space;
 	}
 }
 
