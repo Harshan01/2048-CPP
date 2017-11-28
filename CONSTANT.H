@@ -8,6 +8,7 @@
 #include<fstream.h>
 #include<iomanip.h>
 #include<conio.h>
+#include<constrea.h>
 #include<stdlib.h>
 
 const int SIZE = 4;
@@ -31,10 +32,11 @@ const int keyS = 'S';
 const int keys = 's';
 const int keyD = 'D';
 const int keyd = 'd';
-//const char *SAVEPATH="SAVEDATA.DAT";
+const int LIGHT_AQUA = 11;
+const int LIGHT_GREEN = 10;
+const int LIGHT_RED = 12;
 #define TRUE 1
 #define FALSE 0
 const int EMPTY = -1;
-const int PIXEL = 100;
 #define CONSTANTSINCL
 #endif

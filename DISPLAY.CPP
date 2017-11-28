@@ -20,28 +20,30 @@ void Display::paint()
 	strcat(rowBreak, "----+");
 	//Flush existing screen contents.
 	clrscr();
-	
-	cout << "\n\n\n\n\t\tScore : " << grid.getScore() << endl;
-	
+	static constream cout;//When tried to reinstantiate, this caused program to crash, so making static.
+	char tab_space[] = "                ";
+	cout << setclr(LIGHT_RED);
+	cout << "\n\n\n\n" << tab_space << "Score : " << grid.getScore() << endl;
+
 	//SIZE+1 rowBreaks needed . so one out of loop
-	cout << "\t\t" << rowBreak << endl <<"\t\t";
+	cout << setclr(LIGHT_GREEN) << tab_space << rowBreak << endl << tab_space;
 	for(i = 0 ; i < SIZE ; ++i)
 	{
 		for( j = 0 ; j < SIZE ; ++j)
 		{
 			val = grid.getMatrix()[i][j];
-			cout << colBreak ;
+			cout << setclr(LIGHT_GREEN) << colBreak << setclr(WHITE);
 			if(val == EMPTY)
 				cout << setw(3) << " ";
 			else
 				cout << setw(3) << val;
 		}
 		//SIZE+1  colBreaks also needed. Similarly,
-		cout << colBreak << endl << "\t\t" << rowBreak << endl <<"\t\t";
+		cout << setclr(LIGHT_GREEN) << colBreak << endl << tab_space << rowBreak << endl << tab_space << setclr(LIGHT_AQUA);
 	}
 }
 
-/*This function is called once all initializations are over and the game has started. This takes input forever 
+/*This function is called once all initializations are over and the game has started. This takes input forever
 **till game ends or uses chooses to. */
 void Display :: input()
 {
@@ -90,22 +92,23 @@ void Display :: input()
 		paint();
 	} while(inp != keyx && inp != keyX && grid.isNextMovePossible());
 	//Display game over message, high score(update if new highscore is made) and stuff.
-	cout << "Game Over! Press any key.";
+	static constream cout;
+	cout << setclr(LIGHT_RED) << "Game Over! Press any key.";
 	inp = getch();
 	int score = grid.getScore();
 	clrscr();
-	cout << "\n\n\nGAME OVER!!!\nYour score is : " << score;
+	cout << setclr(WHITE) << "\n\n\n    GAME OVER!!!\n" << setclr(LIGHT_AQUA)  << "    Your score is : " << score;
 	file.seekg(0, ios::beg);
 	int high;
 	file.read((char*)&high, sizeof(int));
 	if(score > high)
 	{
-		cout << "\n\n\nNEW HIGH SCORE!!!";
+		cout << setclr(LIGHT_RED) << "\n\n\n     NEW HIGH SCORE!!!";
 		file.seekp(0, ios::beg);
 		file.write((char*)&score, sizeof(int));
 	}
 	else
-		cout << "\n\n\nHigh score:" << high;
+		cout << setclr(LIGHT_RED) << "\n\n\n    High score : " << high;
 }
 
 void Display :: update(int ctrl)

@@ -20,21 +20,23 @@ void main()
     f.seekg(0, ios::beg);
     f.read( (char*)&high, sizeof(int) );
 	f.close();
-	
+
 	//Without this Grid::newNumber() can't work.
     randomize();
 
     char inp;
-    cout << "\t\t\t2048 GAME\n\n";
-    cout << "HIGH SCORE: " << high << "\n\n\n"; //<--high score
-    cout << "Help:\nN-New game.\nL-Load Game.\nP-Save game.\nX-Exit game.\nUse WASD to move\nPress any key to Start.\n";
+    constream cout;
+    cout << setclr(LIGHT_GREEN);
+    cout << "                                    2048 GAME\n\n";
+    cout << setclr(LIGHT_RED) << "    HIGH SCORE: " << high << "\n\n\n"; //<--high score
+    cout << setclr(WHITE) << "    Help:\n" << setclr(LIGHT_AQUA) <<"    N-New game.\n    L-Load Game.\n    P-Save game.\n    X-Exit game.\n    Use WASD to move\n    Press any key to Start.\n    ";
     getch();
-	
+
 	//Instantiate Display object and boot the game.
     Display g;
 	g.paint();
     g.input();
-	
+
 	//Game ended. :)
     getch();
 }
